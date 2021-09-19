@@ -1,0 +1,5 @@
+Auto_Off_option.c:10:6:Auto_Off_option_screen_func	16	static
+Auto_Off_option.c:27:6:Auto_Off_option_screen_S9	4	static
+Auto_Off_option.c:35:6:Auto_Off_option_screen_S8	4	static
+Auto_Off_option.c:39:6:Auto_Off_option_screen_S5	4	static
+Auto_Off_option.c:45:6:Auto_OFF_process	8	static

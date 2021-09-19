@@ -1,0 +1,5 @@
+Basic_LCD.c:74:13:SPI_Send_Data	24	static
+Basic_LCD.c:103:13:SPI_Send_Cmnd	24	static
+Basic_LCD.c:124:6:LCD_Init	8	static
+Basic_LCD.c:182:6:LCD_DisplayWindow	8	static
+Basic_LCD.c:206:6:LCD_Display_bmp	24	static

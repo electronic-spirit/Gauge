@@ -1,0 +1,6 @@
+Measure_options.c:24:6:Measure_options_screen_func	16	static
+Measure_options.c:85:6:Measure_options_screen_S6	4	static
+Measure_options.c:91:6:Measure_options_screen_S7	4	static
+Measure_options.c:100:6:Measure_options_screen_S9	4	static
+Measure_options.c:108:6:Measure_options_screen_S8	4	static
+Measure_options.c:121:6:Measure_options_screen_S5	4	static

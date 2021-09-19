@@ -1,0 +1,8 @@
+calibration.c:31:6:Approximation_MC110	40	static
+calibration.c:52:6:Calculate	16	static
+calibration.c:72:8:Approximation_pressure	72	static
+calibration.c:98:8:Approximation_Tcoef	64	static
+calibration.c:122:8:Approximation_temperature	56	static
+calibration.c:142:8:Temperature_correction	24	static
+calibration.c:153:8:calculate_current	40	static
+calibration.c:164:8:calculate_voltage	40	static

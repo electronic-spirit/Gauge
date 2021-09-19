@@ -1,0 +1,8 @@
+Display_Options.c:17:6:Display_options_screen_func	24	static
+Display_Options.c:59:6:Display_options_screen_S9	4	static
+Display_Options.c:67:6:Display_options_screen_S6	4	static
+Display_Options.c:73:6:Display_options_screen_S7	4	static
+Display_Options.c:79:6:Display_options_screen_S4	8	static
+Display_Options.c:92:6:Display_options_screen_S8	4	static
+Display_Options.c:103:6:Display_options_screen_S5	4	static
+Display_Options.c:115:6:Light_OFF_process	4	static

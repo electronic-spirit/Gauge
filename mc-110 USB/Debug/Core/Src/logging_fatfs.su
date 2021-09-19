@@ -1,0 +1,9 @@
+logging_fatfs.c:94:6:Logging_init	8	static
+logging_fatfs.c:101:6:Create_File	24	static
+logging_fatfs.c:111:9:Read_File	32	static
+logging_fatfs.c:121:10:FileParser	24	static
+logging_fatfs.c:146:6:my_itoa	72	static
+logging_fatfs.c:180:8:scan_double	64	static
+logging_fatfs.c:214:6:Save_Settings	40	static
+logging_fatfs.c:246:8:Read_Variable_From_File	16	static
+logging_fatfs.c:253:6:Load_Settings	32	static

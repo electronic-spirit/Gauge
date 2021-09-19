@@ -1,0 +1,11 @@
+usb_device.c:48:6:MX_USB_DEVICE_Init	8	static
+usb_device.c:385:10:USBD_MSC_CDC_GetDeviceQualifierDescriptor	16	static
+usb_device.c:392:10:USBD_MSC_CDC_GetOtherSpeedCfgDesc	16	static
+usb_device.c:398:10:USBD_MSC_CDC_GetHSCfgDesc	16	static
+usb_device.c:405:10:USBD_MSC_CDC_GetFSCfgDesc	16	static
+usb_device.c:413:17:USBD_MSC_CDC_Init	24	static
+usb_device.c:430:17:USBD_MSC_CDC_DeInit	16	static
+usb_device.c:444:17:USBD_MSC_CDC_Setup	16	static
+usb_device.c:458:17:USBD_MSC_CDC_DataIn	16	static
+usb_device.c:468:17:USBD_MSC_CDC_DataOut	16	static
+usb_device.c:478:17:USBD_MSC_CDC_EP0_RxReady	16	static

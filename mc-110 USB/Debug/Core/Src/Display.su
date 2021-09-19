@@ -1,0 +1,8 @@
+Display.c:27:6:DrawImage	40	static
+Display.c:57:6:Display_init	24	static
+Display.c:92:6:Gauge_loading	24	static
+Display.c:112:6:Off_screen_func	8	static
+Display.c:127:6:Blink_Edit_Parameter_timer	4	static
+Display.c:134:6:Blink_Edit_Parameter	16	static
+Display.c:144:6:Test_screen_func	16	static
+Display.c:197:6:Display_process	8	static

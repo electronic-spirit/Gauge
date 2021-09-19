@@ -1,0 +1,9 @@
+ELSPIRE_OS.c:13:6:wait_scheduler	4	static
+ELSPIRE_OS.c:19:6:ELSPIRE_OS_KERNEL	8	static
+ELSPIRE_OS.c:25:6:ELSPIRE_OS_INIT	16	static
+ELSPIRE_OS.c:32:6:ELSPIRE_OS_TIMER	16	static
+ELSPIRE_OS.c:48:6:sleep	16	static
+ELSPIRE_OS.c:54:6:Task_STOP	16	static
+ELSPIRE_OS.c:60:6:Task_RUN	16	static
+ELSPIRE_OS.c:66:6:delay_ms	16	static
+ELSPIRE_OS.c:72:6:delay_us	16	static

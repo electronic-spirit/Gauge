@@ -1,0 +1,11 @@
+Real_Time_Clock.c:18:6:Battery_process	8	static
+Real_Time_Clock.c:26:6:RTC_view	32	static
+Real_Time_Clock.c:58:6:RTC_process	32	static
+Real_Time_Clock.c:77:6:RTC_set	48	static
+Real_Time_Clock.c:121:6:RTC_screen_func	16	static
+Real_Time_Clock.c:165:6:RTC_screen_S9	4	static
+Real_Time_Clock.c:173:6:RTC_screen_S5	4	static
+Real_Time_Clock.c:179:6:RTC_screen_S8	4	static
+Real_Time_Clock.c:187:6:RTC_screen_S6	4	static
+Real_Time_Clock.c:201:6:RTC_screen_S7	4	static
+Real_Time_Clock.c:215:6:RTC_screen_S4	24	static
