@@ -55,7 +55,7 @@ Middlewares/Third_Party/FatFs/src/diskio.o: \
  ../Screens/Auto_Off_option.h ../Screens/about_screen_options.h \
  ../Core/Inc/temperature.h ../Screens/logging_option_screen.h \
  ../Core/Inc/calibration.h ../Core/Inc/logging_fatfs.h \
- ../Core/Inc/sound.h
+ ../Core/Inc/sound.h ../Core/Inc/MAX77960.h
 
 ../Middlewares/Third_Party/FatFs/src/diskio.h:
 
@@ -198,3 +198,5 @@ Middlewares/Third_Party/FatFs/src/diskio.o: \
 ../Core/Inc/logging_fatfs.h:
 
 ../Core/Inc/sound.h:
+
+../Core/Inc/MAX77960.h:

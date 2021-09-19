@@ -52,7 +52,7 @@ Core/Src/logging_fatfs.o: ../Core/Src/logging_fatfs.c \
  ../Screens/Auto_Off_option.h ../Screens/about_screen_options.h \
  ../Core/Inc/temperature.h ../Screens/logging_option_screen.h \
  ../Core/Inc/calibration.h ../Core/Inc/logging_fatfs.h \
- ../Core/Inc/sound.h ../FATFS/App/fatfs.h \
+ ../Core/Inc/sound.h ../Core/Inc/MAX77960.h ../FATFS/App/fatfs.h \
  ../Middlewares/Third_Party/FatFs/src/ff.h \
  ../Middlewares/Third_Party/FatFs/src/integer.h ../FATFS/Target/ffconf.h \
  ../Middlewares/Third_Party/FatFs/src/ff_gen_drv.h \
@@ -192,6 +192,8 @@ Core/Src/logging_fatfs.o: ../Core/Src/logging_fatfs.c \
 ../Core/Inc/logging_fatfs.h:
 
 ../Core/Inc/sound.h:
+
+../Core/Inc/MAX77960.h:
 
 ../FATFS/App/fatfs.h:
 

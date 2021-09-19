@@ -51,7 +51,7 @@ Core/Src/Buttons.o: ../Core/Src/Buttons.c ../Core/Inc/Buttons.h \
  ../Screens/Auto_Off_option.h ../Screens/about_screen_options.h \
  ../Core/Inc/temperature.h ../Screens/logging_option_screen.h \
  ../Core/Inc/calibration.h ../Core/Inc/logging_fatfs.h \
- ../Core/Inc/sound.h
+ ../Core/Inc/sound.h ../Core/Inc/MAX77960.h
 
 ../Core/Inc/Buttons.h:
 
@@ -186,3 +186,5 @@ Core/Src/Buttons.o: ../Core/Src/Buttons.c ../Core/Inc/Buttons.h \
 ../Core/Inc/logging_fatfs.h:
 
 ../Core/Inc/sound.h:
+
+../Core/Inc/MAX77960.h:

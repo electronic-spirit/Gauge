@@ -4,6 +4,7 @@
 "./Core/Src/Display.o"
 "./Core/Src/ELSPIRE_OS.o"
 "./Core/Src/Global_Variables.o"
+"./Core/Src/MAX77960.o"
 "./Core/Src/Usart_Parser.o"
 "./Core/Src/W25N01.o"
 "./Core/Src/calibration.o"

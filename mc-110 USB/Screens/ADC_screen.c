@@ -1,10 +1,13 @@
 
 #include "ADC_screen.h"
 #include "u8g2_LCD.h"
+#include "stdio.h"
 extern u8g2_t u8g2;
 
 #define max_edit_param 6
 
+const char* SPS_name[16]={ "RATE_2SPS", "RATE_4SPS", "RATE_8SPS", "RATE_16SPS", "RATE_32SPS", "RATE_63SPS", "RATE_125SPS", "RATE_250SPS",
+		"RATE_500SPS", "RATE_1000SPS", "RATE_2000SPS", "RATE_4000SPS", "RATE_8000SPS", "RATE_16000SPS", "RATE_32000SPS", "RATE_64000SPS"};
 
 void ADC_options_screen_func(void)
 {
@@ -13,41 +16,11 @@ void ADC_options_screen_func(void)
 
 	// PGA
 	u8g2_DrawUTF8(&u8g2, 10, 40, "PGA:");
-	switch(PGA_GAIN)
-	{
-		case 0: sprintf(RAM,"OFF"); break;
-		case 1: sprintf(RAM,"%d", 1); break;
-		case 2: sprintf(RAM,"%d", 2); break;
-		case 3: sprintf(RAM,"%d", 4); break;
-		case 4: sprintf(RAM,"%d", 8); break;
-		case 5: sprintf(RAM,"%d", 16); break;
-		case 6: sprintf(RAM,"%d", 32); break;
-		case 7: sprintf(RAM,"%d", 64); break;
-		case 8: sprintf(RAM,"%d", 128); break;
-	}
-	Blink_Edit_Parameter(120, 40, RAM, edit_param, 0);
+	Blink_Edit_Parameter(120, 40, PGA_name[PGA_GAIN], edit_param, 0);
 
 	// SPS
 	u8g2_DrawUTF8(&u8g2, 10, 60, "SPS:");
-	switch(ADC_SPS)
-	{
-		case 0: Blink_Edit_Parameter(120, 60, "RATE_2SPS", edit_param, 1); break;
-		case 1: Blink_Edit_Parameter(120, 60, "RATE_4SPS", edit_param, 1); break;
-		case 2: Blink_Edit_Parameter(120, 60, "RATE_8SPS", edit_param, 1); break;
-		case 3: Blink_Edit_Parameter(120, 60, "RATE_16SPS", edit_param, 1); break;
-		case 4: Blink_Edit_Parameter(120, 60, "RATE_32SPS", edit_param, 1); break;
-		case 5: Blink_Edit_Parameter(120, 60, "RATE_63SPS", edit_param, 1); break;
-		case 6: Blink_Edit_Parameter(120, 60, "RATE_125SPS", edit_param, 1); break;
-		case 7: Blink_Edit_Parameter(120, 60, "RATE_250SPS", edit_param, 1); break;
-		case 8: Blink_Edit_Parameter(120, 60, "RATE_500SPS", edit_param, 1); break;
-		case 9: Blink_Edit_Parameter(120, 60, "RATE_1000SPS", edit_param, 1); break;
-		case 10: Blink_Edit_Parameter(120, 60, "RATE_2000SPS", edit_param, 1); break;
-		case 11: Blink_Edit_Parameter(120, 60, "RATE_4000SPS", edit_param, 1); break;
-		case 12: Blink_Edit_Parameter(120, 60, "RATE_8000SPS", edit_param, 1); break;
-		case 13: Blink_Edit_Parameter(120, 60, "RATE_16000SPS", edit_param, 1); break;
-		case 14: Blink_Edit_Parameter(120, 60, "RATE_32000SPS", edit_param, 1); break;
-		case 15: Blink_Edit_Parameter(120, 60, "RATE_64000SPS", edit_param, 1); break;
-	}
+	Blink_Edit_Parameter(120, 60,SPS_name[ADC_SPS], edit_param, 1);
 
 	// Calibration
 	u8g2_DrawUTF8(&u8g2, 10, 80, "CAL:");
@@ -66,7 +39,7 @@ void ADC_options_screen_func(void)
 	// Period
 	u8g2_DrawUTF8(&u8g2, 10, 120, "OFF PERIOD:");
 	sprintf(RAM,"%d", AutoOffCoef_period);
-	Blink_Edit_Parameter(120, 120, RAM, edit_param, 4);
+	Blink_Edit_Parameter(160, 120, RAM, edit_param, 4);
 
 	// Period
 	u8g2_DrawUTF8(&u8g2, 10, 140, "GAIN PERIOD:");

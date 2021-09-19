@@ -51,8 +51,8 @@ USB_LIB/usb_device.o: ../USB_LIB/usb_device.c ../USB_LIB/usb_device.h \
  ../Screens/Auto_Off_option.h ../Screens/about_screen_options.h \
  ../Core/Inc/temperature.h ../Screens/logging_option_screen.h \
  ../Core/Inc/calibration.h ../Core/Inc/logging_fatfs.h \
- ../Core/Inc/sound.h ../USB_LIB/usbd_cdc.h ../USB_LIB/usbd_ioreq.h \
- ../USB_LIB/usbd_core.h ../USB_LIB/usbd_ctlreq.h \
+ ../Core/Inc/sound.h ../Core/Inc/MAX77960.h ../USB_LIB/usbd_cdc.h \
+ ../USB_LIB/usbd_ioreq.h ../USB_LIB/usbd_core.h ../USB_LIB/usbd_ctlreq.h \
  ../USB_LIB/usbd_msc_bot.h ../USB_LIB/usbd_msc_scsi.h \
  ../USB_LIB/usbd_desc.h ../USB_LIB/usbd_msc.h \
  ../USB_LIB/usbd_storage_if.h ../USB_LIB/usbd_cdc_if.h
@@ -194,6 +194,8 @@ USB_LIB/usb_device.o: ../USB_LIB/usb_device.c ../USB_LIB/usb_device.h \
 ../Core/Inc/logging_fatfs.h:
 
 ../Core/Inc/sound.h:
+
+../Core/Inc/MAX77960.h:
 
 ../USB_LIB/usbd_cdc.h:
 

@@ -51,7 +51,7 @@ Core/Src/ADC.o: ../Core/Src/ADC.c ../Core/Inc/ADC.h \
  ../Screens/Auto_Off_option.h ../Screens/about_screen_options.h \
  ../Core/Inc/temperature.h ../Screens/logging_option_screen.h \
  ../Core/Inc/calibration.h ../Core/Inc/logging_fatfs.h \
- ../Core/Inc/sound.h ../Core/Inc/u8g2_LCD.h
+ ../Core/Inc/sound.h ../Core/Inc/MAX77960.h ../Core/Inc/u8g2_LCD.h
 
 ../Core/Inc/ADC.h:
 
@@ -186,5 +186,7 @@ Core/Src/ADC.o: ../Core/Src/ADC.c ../Core/Inc/ADC.h \
 ../Core/Inc/logging_fatfs.h:
 
 ../Core/Inc/sound.h:
+
+../Core/Inc/MAX77960.h:
 
 ../Core/Inc/u8g2_LCD.h:

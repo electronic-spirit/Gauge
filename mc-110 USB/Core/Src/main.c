@@ -162,6 +162,8 @@ int main(void)
   Logging_init();
   Load_Settings();
 
+  uint8_t CID = MAX77960_Read_Reg(MAX77960_CID);
+
   Play_Sound((char*)"INTRO.WAV");
   ELSPIRE_OS_KERNEL();
   /* USER CODE END 2 */

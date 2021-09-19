@@ -11,6 +11,7 @@ C_SRCS += \
 ../Core/Src/Display.c \
 ../Core/Src/ELSPIRE_OS.c \
 ../Core/Src/Global_Variables.c \
+../Core/Src/MAX77960.c \
 ../Core/Src/Usart_Parser.c \
 ../Core/Src/W25N01.c \
 ../Core/Src/calibration.c \
@@ -33,6 +34,7 @@ OBJS += \
 ./Core/Src/Display.o \
 ./Core/Src/ELSPIRE_OS.o \
 ./Core/Src/Global_Variables.o \
+./Core/Src/MAX77960.o \
 ./Core/Src/Usart_Parser.o \
 ./Core/Src/W25N01.o \
 ./Core/Src/calibration.o \
@@ -55,6 +57,7 @@ C_DEPS += \
 ./Core/Src/Display.d \
 ./Core/Src/ELSPIRE_OS.d \
 ./Core/Src/Global_Variables.d \
+./Core/Src/MAX77960.d \
 ./Core/Src/Usart_Parser.d \
 ./Core/Src/W25N01.d \
 ./Core/Src/calibration.d \

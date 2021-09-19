@@ -10,19 +10,6 @@
 #define MAX_Y 160
 #define MAX_X 240
 
-//
-//#define	Main_screen						1	// Главный экран
-//#define	Test_screen						2	// Тестовый экран
-//#define Off_screen						3  	// Экран выключения
-//#define Option_screen					4	// Экран основного меню
-//#define Display_options_screen			5	// Экран настройки дисплея
-//#define ADC_options_screen				6	// Экран настройки АЦП
-//#define Measure_options_screen			7	// Настройки измерения
-//#define Parameter_screen				8	// Меню параметры
-//#define RTC_screen						9	// Меню настройки времени и даты
-//#define Auto_Off_option_screen			10	// Настройка автоотключения
-//#define About_options_screen			11	// О приборе
-//#define Logging_options_screen			12	// Логгирование
 
 
 enum Screens{
@@ -55,5 +42,6 @@ void Gauge_loading(uint8_t*text, uint8_t percent);
 extern uint8_t screen;
 extern uint8_t edit_param;
 
+extern const char *PGA_name[9];
 
 #endif /* INC_DISPLAY_H_ */

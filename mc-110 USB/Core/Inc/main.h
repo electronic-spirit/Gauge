@@ -53,6 +53,7 @@ extern "C" {
 #include "calibration.h"
 #include "logging_fatfs.h"
 #include "sound.h"
+#include "MAX77960.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/

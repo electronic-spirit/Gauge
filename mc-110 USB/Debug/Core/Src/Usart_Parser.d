@@ -52,9 +52,9 @@ Core/Src/Usart_Parser.o: ../Core/Src/Usart_Parser.c \
  ../Screens/Auto_Off_option.h ../Screens/about_screen_options.h \
  ../Core/Inc/temperature.h ../Screens/logging_option_screen.h \
  ../Core/Inc/calibration.h ../Core/Inc/logging_fatfs.h \
- ../Core/Inc/sound.h ../USB_LIB/usbd_cdc_if.h ../USB_LIB/usbd_cdc.h \
- ../USB_LIB/usbd_ioreq.h ../USB_LIB/usbd_def.h ../USB_LIB/usbd_conf.h \
- ../USB_LIB/usbd_core.h ../USB_LIB/usbd_ctlreq.h
+ ../Core/Inc/sound.h ../Core/Inc/MAX77960.h ../USB_LIB/usbd_cdc_if.h \
+ ../USB_LIB/usbd_cdc.h ../USB_LIB/usbd_ioreq.h ../USB_LIB/usbd_def.h \
+ ../USB_LIB/usbd_conf.h ../USB_LIB/usbd_core.h ../USB_LIB/usbd_ctlreq.h
 
 ../Core/Inc/Usart_Parser.h:
 
@@ -189,6 +189,8 @@ Core/Src/Usart_Parser.o: ../Core/Src/Usart_Parser.c \
 ../Core/Inc/logging_fatfs.h:
 
 ../Core/Inc/sound.h:
+
+../Core/Inc/MAX77960.h:
 
 ../USB_LIB/usbd_cdc_if.h:
 
