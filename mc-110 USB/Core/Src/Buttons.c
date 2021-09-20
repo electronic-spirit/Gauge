@@ -17,7 +17,6 @@ void Buttons_init(void)
 {
 	uint8_t tx_buf[2], rx_buf[2];
 
-	TURN_ON_ADC_POWER();
 	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, GPIO_PIN_SET);
 
 
@@ -338,18 +337,18 @@ void Buttons_process(void)
 	keypad_code=keypad;
 	switch(keypad)
 	{
-		case 64519: LED(0,0,1); if(Button_State==0){Button_State=1; Button_S2_press_callback();} break;
-		case 64007: LED(0,0,1); if(Button_State==0){Button_State=1; Button_S3_press_callback();} break;
-		case 62983: LED(0,0,1); if(Button_State==0){Button_State=1; Button_S4_press_callback();} break;
-		case 60935: LED(0,0,1); if(Button_State==0){Button_State=1; Button_S5_press_callback();} break;
-		case 56839: LED(0,0,1); if(Button_State==0){Button_State=1; Button_S6_press_callback();} break;
-		case 48647: LED(0,0,1); if(Button_State==0){Button_State=1; Button_S7_press_callback();} break;
-		case 32263: LED(0,0,1); if(Button_State==0){Button_State=1; Button_S8_press_callback();} break;
-		case 65030: LED(0,0,1); if(Button_State==0){Button_State=1; Button_S9_press_callback();} break;
-		case 65029: LED(0,0,1); if(Button_State==0){Button_State=1; Button_S10_press_callback();} break;
-		case 65027: LED(0,0,1); if(Button_State==0){Button_State=1; Button_S11_press_callback();} break;
-		case 65287: LED(0,0,1); if(Button_State==0){Button_State=1; Button_S1_press_callback();} break; // Выключение
-		default: LED(0,0,0); buttons_press=Button_State=0; break;
+		case 64519: if(Button_State==0){Button_State=1; Button_S2_press_callback();} break;
+		case 64007: if(Button_State==0){Button_State=1; Button_S3_press_callback();} break;
+		case 62983: if(Button_State==0){Button_State=1; Button_S4_press_callback();} break;
+		case 60935: if(Button_State==0){Button_State=1; Button_S5_press_callback();} break;
+		case 56839: if(Button_State==0){Button_State=1; Button_S6_press_callback();} break;
+		case 48647: if(Button_State==0){Button_State=1; Button_S7_press_callback();} break;
+		case 32263: if(Button_State==0){Button_State=1; Button_S8_press_callback();} break;
+		case 65030: if(Button_State==0){Button_State=1; Button_S9_press_callback();} break;
+		case 65029: if(Button_State==0){Button_State=1; Button_S10_press_callback();} break;
+		case 65027: if(Button_State==0){Button_State=1; Button_S11_press_callback();} break;
+		case 65287: if(Button_State==0){Button_State=1; Button_S1_press_callback();} break; // Выключение
+		default: buttons_press=Button_State=0; break;
 	}
 
 	if((Button_State==1)&&(buttons_press<20))buttons_press++;

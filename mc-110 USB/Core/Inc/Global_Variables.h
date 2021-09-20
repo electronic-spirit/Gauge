@@ -7,9 +7,9 @@
 #include "stm32l4xx_hal.h"
 
 
-#define ADC_BUFF_SIZE	512		// Размеры буферов
-#define NUMBER_OF_VARIABLES	15	// Доступные глобальные переменные
-#define NUMBER_OF_TYPES	8		// Количество типов данных
+#define ADC_BUFF_SIZE			512		// Размеры буферов
+#define NUMBER_OF_VARIABLES		16		// Доступные глобальные переменные
+#define NUMBER_OF_TYPES			8		// Количество типов данных
 
 enum Errors{
 	ADC_cal_err,				// Ошибка калибровки ADC
@@ -36,6 +36,7 @@ enum GlobalVariables{
 	current_4_20mA_name,
 	voltage_measure_name,
 	Kdiv_name,
+	ADC_channel_OFF_name,
 };
 
 

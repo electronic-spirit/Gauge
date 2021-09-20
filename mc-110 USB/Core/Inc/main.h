@@ -158,8 +158,8 @@ extern ADC_HandleTypeDef hadc1;
 #define LCD_CS_Pin GPIO_PIN_0
 #define LCD_CS_GPIO_Port GPIOE
 /* USER CODE BEGIN Private defines */
-#define TURN_ON_ADC_POWER()            HAL_GPIO_WritePin(EN_AV6_GPIO_Port, EN_AV6_Pin, GPIO_PIN_SET); HAL_GPIO_WritePin(EN_AV6_reserv_GPIO_Port, EN_AV6_reserv_Pin, GPIO_PIN_SET);
-#define TURN_OFF_ADC_POWER()           HAL_GPIO_WritePin(EN_AV6_GPIO_Port, EN_AV6_Pin, GPIO_PIN_RESET); HAL_GPIO_WritePin(EN_AV6_reserv_GPIO_Port, EN_AV6_reserv_Pin, GPIO_PIN_RESET);
+#define TURN_ON_ADC_POWER()            {HAL_GPIO_WritePin(EN_AV6_GPIO_Port, EN_AV6_Pin, GPIO_PIN_SET); HAL_GPIO_WritePin(EN_AV6_reserv_GPIO_Port, EN_AV6_reserv_Pin, GPIO_PIN_SET);}
+#define TURN_OFF_ADC_POWER()           {HAL_GPIO_WritePin(EN_AV6_GPIO_Port, EN_AV6_Pin, GPIO_PIN_RESET); HAL_GPIO_WritePin(EN_AV6_reserv_GPIO_Port, EN_AV6_reserv_Pin, GPIO_PIN_RESET);}
 
 #define TURN_ON_SOUND()			HAL_GPIO_WritePin(Audio_EN_GPIO_Port, Audio_EN_Pin, GPIO_PIN_SET);
 #define TURN_OFF_SOUND()        HAL_GPIO_WritePin(Audio_EN_GPIO_Port, Audio_EN_Pin, GPIO_PIN_RESET);

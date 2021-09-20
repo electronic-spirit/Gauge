@@ -20,6 +20,9 @@ uint8_t devider = 0;											// Делитель PGA
 uint16_t ADC_counter = 0;										// Счетчик кольцевых буферов
 uint8_t calibr_process = 0;										// Устанавливается в 1 когда идет калибровка
 uint8_t read_off_gain = 0;
+uint8_t start_packet=0;
+
+void Measure_Kdiv(void);
 
 
 uint32_t ADC_Read_REG(uint8_t REG, uint8_t len)
@@ -229,6 +232,7 @@ void ADC_init(void)
 {
 	uint8_t aTxBuffer[4], aRxBuffer[4];
 	uint32_t data=0xFFFFFFFF;
+	uint16_t i;
 
 	// Reset
 	aTxBuffer[0] = 0x30;
@@ -238,10 +242,12 @@ void ADC_init(void)
 	HAL_SPI_TransmitReceive(&hspi1, (uint8_t*)aTxBuffer, (uint8_t *)aRxBuffer, 1, 1000);
 	ADC_NCS_NOT_ACTIVE();
 
-	while(data!=152)
+	while(i<10000)
 	{
 		data=ADC_Read_STAT();
+		i++;
 	}
+	if(data!=152) ERROR_REG=(1<<ADC_err);
 
 	// Настройка АЦП
 	aTxBuffer[0] = 0x09;
@@ -297,49 +303,70 @@ void ADC_EXT(void)
 {
 	uint16_t i=0;
 
-	if(adc_full_buff>2)
-	{
+//	if(adc_full_buff>2)
+//	{
 		if(read_off_gain==0)
 		{
-			for(i=0;i<ADC_Buff_size-1;i++)
-			{
-				ADC_channel_0[i]=ADC_channel_0[i+1];
-				ADC_channel_1[i]=ADC_channel_1[i+1];
-				ADC_channel_2[i]=ADC_channel_2[i+1];
-				ADC_channel_3[i]=ADC_channel_3[i+1];
-				ADC_channel_4[i]=ADC_channel_4[i+1];
-				ADC_channel_5[i]=ADC_channel_5[i+1];
-			}
-
 			for(i=0;i<6;i++)ADC_data[i]=ADC_Read_DATA(i);
 
-			ADC_channel_0[ADC_Buff_size-1]=ADC_data[0];
-			ADC_channel_1[ADC_Buff_size-1]=ADC_data[1];
-			ADC_channel_2[ADC_Buff_size-1]=ADC_data[2];
-			ADC_channel_3[ADC_Buff_size-1]=ADC_data[3];
-			ADC_channel_4[ADC_Buff_size-1]=ADC_data[4];
-			ADC_channel_5[ADC_Buff_size-1]=ADC_data[5];
+//			if(start_packet==0)
+//			{
+				for(i=0;i<ADC_Buff_size-1;i++)
+				{
+					ADC_channel_0[i]=ADC_channel_0[i+1];
+					ADC_channel_1[i]=ADC_channel_1[i+1];
+					ADC_channel_2[i]=ADC_channel_2[i+1];
+					ADC_channel_3[i]=ADC_channel_3[i+1];
+					ADC_channel_4[i]=ADC_channel_4[i+1];
+					ADC_channel_5[i]=ADC_channel_5[i+1];
+				}
+
+				ADC_channel_0[ADC_Buff_size-1]=ADC_data[0];
+				ADC_channel_1[ADC_Buff_size-1]=ADC_data[1];
+				ADC_channel_2[ADC_Buff_size-1]=ADC_data[2];
+				ADC_channel_3[ADC_Buff_size-1]=ADC_data[3];
+				ADC_channel_4[ADC_Buff_size-1]=ADC_data[4];
+				ADC_channel_5[ADC_Buff_size-1]=ADC_data[5];
+//			}
+//			else
+//			{
+////				ADC_channel_0[ADC_Buff_size-1]=12345;
+////				ADC_channel_1[ADC_Buff_size-1]=12345;
+////				ADC_channel_2[ADC_Buff_size-1]=12345;
+////				ADC_channel_3[ADC_Buff_size-1]=12345;
+////				ADC_channel_4[ADC_Buff_size-1]=12345;
+////				ADC_channel_5[ADC_Buff_size-1]=12345;
+////				start_packet=0;
+//			}
 		}
 		else
 		{
-			if(read_off_gain==1)
-			{
-				read_off_gain=2;
-			}
-			else
-			{
+//			if(read_off_gain==1)
+//			{
+//				read_off_gain=2;
+//			}
+//			else
+//			{
 				for(i=1;i<ADC_Buff_size;i++)
 				{ ADC_channel_OFF[i-1]=ADC_channel_OFF[i]; }
 				for(i=0;i<6;i++)ADC_data[i]=ADC_Read_DATA(i);
 				ADC_channel_OFF[ADC_Buff_size-1]=ADC_data[5];
-			}
+//			}
 		}
-	}
+//	}
 
 //	if(adc_full_buff<ADC_Buff_size)adc_full_buff++;
 //	else{if(cal_ag<10)cal_ag++;}
 //	if(cal_ag==10){cal_ag=20; for(i=0;i<6;i++) Kag[i]=(double)CALag[i]/(double)ADC_middle[i];}
-	adc_full_buff++;
+
+	if(start_packet==0)adc_full_buff++;
+	else start_packet=0;
+
+	// Расчитываем Kdiv
+	//Kdiv = 128.0/(OldData/(double)ADC_middle[5]);
+	if(AutoAmpCoef==1)Measure_Kdiv();
+	else Kdiv=devider;
+
 	adc_timeout=adc_timeout_const;
 	ADC_Conversion(ADC_SPS);
 }
@@ -356,6 +383,7 @@ void Measure_Kdiv(void)
 			ADC_Conversion(ADC_SPS);
 			read_off_gain=1;
 			adc_full_buff=0;
+			start_packet=1;
 		}
 	}
 	// Gain OFF
@@ -367,6 +395,7 @@ void Measure_Kdiv(void)
 			ADC_Conversion(ADC_SPS);
 			adc_full_buff=0;
 			read_off_gain=0;
+			start_packet=1;
 		}
 	}
 	Kdiv=(double)ADC_middle[5]/(double)ADC_middle[6];
@@ -456,10 +485,6 @@ void ADC_process(void)
 	if(PGA_GAIN==0)devider=1;
 	else devider= (0x01<<(PGA_GAIN-1));
 
-	// Расчитываем Kdiv
-	//Kdiv = 128.0/(OldData/(double)ADC_middle[5]);
-	if(AutoAmpCoef==1)Measure_Kdiv();
-	else Kdiv=devider;
 
 	ADC_volt[0]=ADC_middle[0]*((RefVoltage*1000)/(8388608*Kdiv));
 	ADC_volt[1]=ADC_middle[1]*((RefVoltage*1000)/(8388608*Kdiv));

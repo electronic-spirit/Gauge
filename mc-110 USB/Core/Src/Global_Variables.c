@@ -4,8 +4,6 @@
 //										       RAM
 //--------------------------------------------------------------------------------------------
 
-
-
 int32_t ADC_data[6];				// Мгновенные значения АЦП
 double ADC_volt[6];					// Мгновенные значения АЦП в вольтах
 
@@ -48,6 +46,7 @@ uint16_t AutoOffCoef_period;
 uint16_t AutoGainCoef_period;
 double RefVoltage = 3.29923;
 double Kdiv=1.0;												// Реальный коэффициент усиления
+
 
 //--------------------------------------------------------------------------------------------
 //										       EEPROM
@@ -103,6 +102,7 @@ uint32_t GV_LINKS[NUMBER_OF_VARIABLES]={
 	[current_4_20mA_name]=&current_4_20mA,
 	[voltage_measure_name]=&voltage_measure,
 	[Kdiv_name]=&Kdiv,
+	[ADC_channel_OFF_name]=&ADC_channel_OFF,
 };
 
 
@@ -126,6 +126,7 @@ const char* GV_STRING[NUMBER_OF_VARIABLES]=
 	[current_4_20mA_name]="current_4_20mA",
 	[voltage_measure_name]="voltage_measure",
 	[Kdiv_name]="Kdiv",
+	[ADC_channel_OFF_name]="ADC_channel_OFF"
 };
 
 
@@ -147,6 +148,7 @@ const uint8_t GV_NUM_OF_SYM[NUMBER_OF_VARIABLES]=
 	[current_4_20mA_name]=14,
 	[voltage_measure_name]=15,
 	[Kdiv_name]=4,
+	[ADC_channel_OFF_name]=15,
 };
 
 // Тип переменных
@@ -167,6 +169,7 @@ const uint8_t GV_TYPE[NUMBER_OF_VARIABLES]=
 	[current_4_20mA_name]=type_DOUBLE,
 	[voltage_measure_name]=type_DOUBLE,
 	[Kdiv_name]=type_DOUBLE,
+	[ADC_channel_OFF_name]=type_INT32,
 };
 
 
@@ -188,6 +191,7 @@ const uint16_t GV_LENGTH[NUMBER_OF_VARIABLES]=
 	[current_4_20mA_name]=1,
 	[voltage_measure_name]=1,
 	[Kdiv_name]=1,
+	[ADC_channel_OFF_name]=ADC_BUFF_SIZE,
 };
 
 

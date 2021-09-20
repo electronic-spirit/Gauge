@@ -5,7 +5,7 @@
 
 
 // Количество задач
-#define num_of_tasks        	8
+#define num_of_tasks        	10
 
 void (*new_task[num_of_tasks+1])(void);
 void ELSPIRE_OS_KERNEL(void);
