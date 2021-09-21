@@ -160,7 +160,7 @@ uint8_t CDC_Transmit_FS(uint8_t* Buf, uint16_t Len)
   uint8_t result = USBD_OK;
   /* USER CODE BEGIN 7 */
   USBD_CDCMSC_HandleTypeDef *hcdc = (USBD_CDCMSC_HandleTypeDef*)hUsbDeviceFS.pClassDataCDC;
-  USB_timeout=1500;
+  USB_timeout=15000;
   while(hcdc->TxState!=0)
   {
 	  USB_timeout--;

@@ -426,6 +426,7 @@ void Parser_process(void)
 		// Parser
 		else
 		{
+			LED(0,1,0);
 			switch(parser(0))
 			{
 				case 0xFFFF: break;

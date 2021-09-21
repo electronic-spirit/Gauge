@@ -10,7 +10,7 @@ ADC.c:214:6:ADC_Start_Conversion	32	static
 ADC.c:231:6:ADC_init	32	static
 ADC.c:291:6:ADC_PGA_Set	24	static
 ADC.c:302:6:ADC_EXT	24	static
-ADC.c:375:6:Measure_Kdiv	16	static
-ADC.c:405:6:ADC_process	136	static
-ADC.c:508:7:HEX2FLOAT	40	static
-ADC.c:526:6:HEX2BIN	32	static
+ADC.c:377:6:Measure_Kdiv	16	static
+ADC.c:407:6:ADC_process	136	static
+ADC.c:510:7:HEX2FLOAT	40	static
+ADC.c:528:6:HEX2BIN	32	static

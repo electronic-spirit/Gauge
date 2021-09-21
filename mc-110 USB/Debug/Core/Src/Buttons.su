@@ -13,4 +13,4 @@ Buttons.c:269:6:Button_S9_press_callback	8	static
 Buttons.c:293:6:Button_S10_press_callback	4	static
 Buttons.c:306:6:Button_S11_press_callback	4	static
 Buttons.c:322:6:Buttons_process	32	static
-Buttons.c:374:6:Buttons_timer	4	static
+Buttons.c:381:6:Buttons_timer	4	static

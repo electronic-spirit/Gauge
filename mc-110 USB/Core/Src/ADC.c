@@ -309,8 +309,8 @@ void ADC_EXT(void)
 		{
 			for(i=0;i<6;i++)ADC_data[i]=ADC_Read_DATA(i);
 
-//			if(start_packet==0)
-//			{
+			if(adc_full_buff!=0)
+			{
 				for(i=0;i<ADC_Buff_size-1;i++)
 				{
 					ADC_channel_0[i]=ADC_channel_0[i+1];
@@ -327,7 +327,8 @@ void ADC_EXT(void)
 				ADC_channel_3[ADC_Buff_size-1]=ADC_data[3];
 				ADC_channel_4[ADC_Buff_size-1]=ADC_data[4];
 				ADC_channel_5[ADC_Buff_size-1]=ADC_data[5];
-//			}
+			}
+			adc_full_buff++;
 //			else
 //			{
 ////				ADC_channel_0[ADC_Buff_size-1]=12345;
@@ -359,8 +360,9 @@ void ADC_EXT(void)
 //	else{if(cal_ag<10)cal_ag++;}
 //	if(cal_ag==10){cal_ag=20; for(i=0;i<6;i++) Kag[i]=(double)CALag[i]/(double)ADC_middle[i];}
 
-	if(start_packet==0)adc_full_buff++;
-	else start_packet=0;
+	//if(start_packet==0)
+		adc_full_buff++;
+	//else start_packet=0;
 
 	// Расчитываем Kdiv
 	//Kdiv = 128.0/(OldData/(double)ADC_middle[5]);
@@ -377,10 +379,10 @@ void Measure_Kdiv(void)
 	// Gain
 	if(read_off_gain==0)
 	{
-		if(adc_full_buff>=AutoGainCoef_period)
+		if(adc_full_buff>=(AutoGainCoef_period+1))
 		{
 			ADC_PGA_Set(PGA_GAIN_OFF);
-			ADC_Conversion(ADC_SPS);
+			//ADC_Conversion(ADC_SPS);
 			read_off_gain=1;
 			adc_full_buff=0;
 			start_packet=1;
@@ -389,10 +391,10 @@ void Measure_Kdiv(void)
 	// Gain OFF
 	else
 	{
-		if(adc_full_buff>=AutoOffCoef_period)
+		if(adc_full_buff>=(AutoOffCoef_period+1))
 		{
 			ADC_PGA_Set(PGA_GAIN);
-			ADC_Conversion(ADC_SPS);
+			//ADC_Conversion(ADC_SPS);
 			adc_full_buff=0;
 			read_off_gain=0;
 			start_packet=1;

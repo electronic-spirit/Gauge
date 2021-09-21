@@ -8,7 +8,7 @@
 
 
 #define ADC_BUFF_SIZE			512		// Размеры буферов
-#define NUMBER_OF_VARIABLES		16		// Доступные глобальные переменные
+#define NUMBER_OF_VARIABLES		17		// Доступные глобальные переменные
 #define NUMBER_OF_TYPES			8		// Количество типов данных
 
 enum Errors{
@@ -16,6 +16,7 @@ enum Errors{
 	ADC_err,					// Отказ АЦП
 	Memory_err,					// Отсутствует или повреждена FLASH
 	USB_CVC_err,				// Ошибка отправки по USB
+	KeyPad_err,					// Ошибки клавиатуры
 };
 
 
@@ -37,6 +38,7 @@ enum GlobalVariables{
 	voltage_measure_name,
 	Kdiv_name,
 	ADC_channel_OFF_name,
+	ERROR_name,
 };
 
 

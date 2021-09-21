@@ -17,8 +17,8 @@ void Buttons_init(void)
 {
 	uint8_t tx_buf[2], rx_buf[2];
 
+	// Reset
 	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, GPIO_PIN_SET);
-
 
 	tx_buf[0] = PI4IOE5V6416_REG_O_STT1; // wr to out-reg  = 0x18
 	tx_buf[1] = 0x18;
@@ -324,13 +324,20 @@ void Buttons_process(void)
 	uint16_t keypad = 0;
 	uint8_t aTxBuffer[4], aRxBuffer[4];
 
+	// reset if bug
+	aTxBuffer[0] = PI4IOE5V6416_REG_INT_MSK0;
+	aRxBuffer[0] = 0x00;
+	HAL_I2C_Master_Transmit(&hi2c1, PI4IOE5V6416_WR, aTxBuffer, 1, 1000);
+	HAL_I2C_Master_Receive(&hi2c1, PI4IOE5V6416_RD, (uint8_t *)aRxBuffer, 1, 1000);
+	if(aRxBuffer[0] == 0x00){ERROR_REG|=(1<<KeyPad_err);HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, GPIO_PIN_RESET); delay_us(100); HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, GPIO_PIN_SET);}
+
 	aTxBuffer[0] = 0x00;
-	HAL_I2C_Master_Transmit(&hi2c1, PI4IOE5V6416_WR, &aTxBuffer, 1, 1000);
+	HAL_I2C_Master_Transmit(&hi2c1, PI4IOE5V6416_WR, aTxBuffer, 1, 1000);
 	HAL_I2C_Master_Receive(&hi2c1, PI4IOE5V6416_RD, (uint8_t *)aRxBuffer, 1, 1000);
 	keypad=aRxBuffer[0];
 	keypad<<=8;
 	aTxBuffer[0] = 0x01;
-	HAL_I2C_Master_Transmit(&hi2c1, PI4IOE5V6416_WR, &aTxBuffer, 1, 1000);
+	HAL_I2C_Master_Transmit(&hi2c1, PI4IOE5V6416_WR, aTxBuffer, 1, 1000);
 	HAL_I2C_Master_Receive(&hi2c1, PI4IOE5V6416_RD, (uint8_t *)aRxBuffer, 1, 1000);
 	keypad+=(aRxBuffer[0]&0x07);
 

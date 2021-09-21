@@ -94,15 +94,15 @@ static void MX_DAC1_Init(void);
 /* USER CODE BEGIN 0 */
 void led_on(void)
 {
-	LED(0,1,0);
+	if(ERROR_REG!=0)LED(1,0,0);
 	Task_STOP(9);
-	Task_RUN(10, 500);
+	Task_RUN(10, 250);
 }
 void led_off(void)
 {
 	LED(0,0,0);
 	Task_STOP(10);
-	Task_RUN(9, 500);
+	Task_RUN(9, 250);
 }
 /* USER CODE END 0 */
 

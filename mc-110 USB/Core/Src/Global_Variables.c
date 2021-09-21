@@ -103,6 +103,7 @@ uint32_t GV_LINKS[NUMBER_OF_VARIABLES]={
 	[voltage_measure_name]=&voltage_measure,
 	[Kdiv_name]=&Kdiv,
 	[ADC_channel_OFF_name]=&ADC_channel_OFF,
+	[ERROR_name]=&ERROR_REG,
 };
 
 
@@ -126,7 +127,8 @@ const char* GV_STRING[NUMBER_OF_VARIABLES]=
 	[current_4_20mA_name]="current_4_20mA",
 	[voltage_measure_name]="voltage_measure",
 	[Kdiv_name]="Kdiv",
-	[ADC_channel_OFF_name]="ADC_channel_OFF"
+	[ADC_channel_OFF_name]="ADC_channel_OFF",
+	[ERROR_name]="Error",
 };
 
 
@@ -149,6 +151,7 @@ const uint8_t GV_NUM_OF_SYM[NUMBER_OF_VARIABLES]=
 	[voltage_measure_name]=15,
 	[Kdiv_name]=4,
 	[ADC_channel_OFF_name]=15,
+	[ERROR_name]=5,
 };
 
 // Тип переменных
@@ -170,6 +173,7 @@ const uint8_t GV_TYPE[NUMBER_OF_VARIABLES]=
 	[voltage_measure_name]=type_DOUBLE,
 	[Kdiv_name]=type_DOUBLE,
 	[ADC_channel_OFF_name]=type_INT32,
+	[ERROR_name]=type_INT32,
 };
 
 
@@ -192,6 +196,7 @@ const uint16_t GV_LENGTH[NUMBER_OF_VARIABLES]=
 	[voltage_measure_name]=1,
 	[Kdiv_name]=1,
 	[ADC_channel_OFF_name]=ADC_BUFF_SIZE,
+	[ERROR_name]=1,
 };
 
 
