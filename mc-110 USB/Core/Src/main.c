@@ -104,6 +104,13 @@ void led_off(void)
 	Task_STOP(10);
 	Task_RUN(9, 250);
 }
+void test_task(void)
+{
+	uint8_t CID = MAX77960_Read_Reg(MAX77960_CID);
+	sleep(300);
+}
+
+
 /* USER CODE END 0 */
 
 /**
@@ -153,17 +160,19 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
   // Таски
-  	new_task[1]=Parser_process;			// Парсинг команд через виртуальный компорт
-	new_task[2]=ADC_process;			// АЦП
-	new_task[3]=Display_process;		// Дисплей
-	new_task[4]=Buttons_process;		// Кнопки
-	new_task[5]=RTC_process;			// Часы реального времени
-	new_task[6]=Auto_OFF_process;		// Автовыключение
-	new_task[7]=Temperature_process;	// Температура МКУ
-	new_task[8]=Battery_process;		// Напряжение на батарее
+  new_task[1]=Parser_process;		// Парсинг команд через виртуальный компорт
+  new_task[2]=ADC_process;			// АЦП
+  new_task[3]=Display_process;		// Дисплей
+  new_task[4]=Buttons_process;		// Кнопки
+  new_task[5]=RTC_process;			// Часы реального времени
+  new_task[6]=Auto_OFF_process;		// Автовыключение
+  new_task[7]=Temperature_process;	// Температура МКУ
+  new_task[8]=Battery_process;		// Напряжение на батарее
+new_task[11]=test_task;
 
-	new_task[9]=led_on;
-	new_task[10]=led_off;
+  Task_STOP(10);
+  new_task[9]=led_on;
+  new_task[10]=led_off;
 
   HAL_GPIO_WritePin(GPIOC, GPIO_PIN_8, GPIO_PIN_SET); // Питание на самоблокировку
   HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_SET); // Питание на самоблокировку
@@ -177,7 +186,7 @@ int main(void)
   Logging_init();
   Load_Settings();
 
-  uint8_t CID = MAX77960_Read_Reg(MAX77960_CID);
+
 
   Play_Sound((char*)"INTRO.WAV");
   ELSPIRE_OS_KERNEL();
@@ -562,7 +571,7 @@ static void MX_SPI1_Init(void)
   hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
   hspi1.Init.CLKPhase = SPI_PHASE_1EDGE;
   hspi1.Init.NSS = SPI_NSS_SOFT;
-  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_128;
+  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_64;
   hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
   hspi1.Init.TIMode = SPI_TIMODE_DISABLE;
   hspi1.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
@@ -602,7 +611,7 @@ static void MX_SPI2_Init(void)
   hspi2.Init.CLKPolarity = SPI_POLARITY_LOW;
   hspi2.Init.CLKPhase = SPI_PHASE_1EDGE;
   hspi2.Init.NSS = SPI_NSS_SOFT;
-  hspi2.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_128;
+  hspi2.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_64;
   hspi2.Init.FirstBit = SPI_FIRSTBIT_MSB;
   hspi2.Init.TIMode = SPI_TIMODE_DISABLE;
   hspi2.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
@@ -680,7 +689,7 @@ static void MX_TIM2_Init(void)
   htim2.Instance = TIM2;
   htim2.Init.Prescaler = 2;
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim2.Init.Period = 100;
+  htim2.Init.Period = 50;
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_PWM_Init(&htim2) != HAL_OK)
@@ -730,7 +739,7 @@ static void MX_TIM4_Init(void)
   htim4.Instance = TIM4;
   htim4.Init.Prescaler = 0;
   htim4.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim4.Init.Period = 65535;
+  htim4.Init.Period = 100;
   htim4.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim4.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_PWM_Init(&htim4) != HAL_OK)
@@ -1000,6 +1009,8 @@ void Error_Handler(void)
   __disable_irq();
   while (1)
   {
+	  // Если попали сюда, то делаем программный сброс контроллера
+	  SCB->AIRCR = 0x05FA0004;
   }
   /* USER CODE END Error_Handler_Debug */
 }

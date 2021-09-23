@@ -54,7 +54,7 @@ FATFS/Target/user_diskio.o: ../FATFS/Target/user_diskio.c \
  ../Screens/Auto_Off_option.h ../Screens/about_screen_options.h \
  ../Core/Inc/temperature.h ../Screens/logging_option_screen.h \
  ../Core/Inc/calibration.h ../Core/Inc/logging_fatfs.h \
- ../Core/Inc/sound.h ../Core/Inc/MAX77960.h
+ ../Core/Inc/sound.h ../Core/Inc/MAX77960.h ../Core/Inc/Units_Converter.h
 
 ../Middlewares/Third_Party/FatFs/src/ff_gen_drv.h:
 
@@ -199,3 +199,5 @@ FATFS/Target/user_diskio.o: ../FATFS/Target/user_diskio.c \
 ../Core/Inc/sound.h:
 
 ../Core/Inc/MAX77960.h:
+
+../Core/Inc/Units_Converter.h:

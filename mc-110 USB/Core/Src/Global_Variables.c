@@ -8,13 +8,7 @@ int32_t ADC_data[6];				// Мгновенные значения АЦП
 double ADC_volt[6];					// Мгновенные значения АЦП в вольтах
 
 // Кольцевые буферы для АЦП
-int32_t ADC_channel_1[ADC_BUFF_SIZE];
-int32_t ADC_channel_2[ADC_BUFF_SIZE];
-int32_t ADC_channel_3[ADC_BUFF_SIZE];
-int32_t ADC_channel_4[ADC_BUFF_SIZE];
-int32_t ADC_channel_5[ADC_BUFF_SIZE];
-int32_t ADC_channel_0[ADC_BUFF_SIZE];
-int32_t ADC_channel_OFF[ADC_BUFF_SIZE];
+int32_t ADC_channel[7][ADC_BUFF_SIZE];
 int32_t ADC_middle[7];
 
 double Test_Pressure;
@@ -23,7 +17,8 @@ double Temperature2 = 0;			// Температура сенсора 2
 double Pressure;
 double Pressure_Ag;
 double Pressure_zero=0.0;			// Обнуление давления
-double Electric_zero=0.0;			// Обнуление давления
+double Voltage_zero=0.0;			// Обнуление Напряжения
+double Current_zero=0.0;			// Обнуление тока
 double Temperature = 0;				// Температура сенсора
 double Temperature_coeff_25=1.0;	// Температурный коэффициент (отношение АЦП питающей текщей к АЦП питающей которая должна быть при 25 градусах)
 uint16_t Vbat_uint[128];			// Напряжение на батарее
@@ -34,10 +29,11 @@ uint8_t usart1_counter=0;
 int8_t rx_cmplt=0;
 uint8_t BLE_config = 1;				// Режим работы bluetooth
 double MCU_temp = 0;				// Температура кристала
-uint8_t E_fun = 0;					// Что отображать во второй строке
+uint8_t E_fun = mA;					// Что отображать во второй строке
 
 double current_4_20mA;
 double voltage_measure;
+uint8_t SW_state = 0;
 
 int32_t zero_ADC[6];
 
@@ -61,7 +57,7 @@ uint8_t PV=0;							// P+V
 uint8_t PI=0;							// P+I
 uint8_t PE=0;							// P+E
 
-uint8_t PGA_GAIN = PGA_GAIN16;
+uint8_t PGA_GAIN[7]={PGA_GAIN_OFF,PGA_GAIN1,PGA_GAIN2,PGA_GAIN4,PGA_GAIN8,PGA_GAIN16,PGA_GAIN_OFF};
 uint8_t ADC_SPS = DATA_RATE_16SPS;
 uint8_t adc_calibration_mode=self_calibration;		// Один из трех видов калибровки
 uint16_t ADC_Buff_size=32;							// Размер окна скользящего среднего
@@ -81,7 +77,7 @@ uint8_t logging_len=0;								// Длительность логгировани
 uint8_t logging_num=0;								// Количество файлов
 
 uint8_t Sound_Vol=4;
-
+uint8_t Units = kPa;
 
 //------------------------------------------------------------------------------------------------
 
@@ -89,12 +85,12 @@ uint8_t Sound_Vol=4;
 uint32_t GV_LINKS[NUMBER_OF_VARIABLES]={
 	[ADC_data_name]=&ADC_data,
 	[ADC_volt_name]=&ADC_volt,
-	[ADC_channel_0_name]=&ADC_channel_0,
-	[ADC_channel_1_name]=&ADC_channel_1,
-	[ADC_channel_2_name]=&ADC_channel_2,
-	[ADC_channel_3_name]=&ADC_channel_3,
-	[ADC_channel_4_name]=&ADC_channel_4,
-	[ADC_channel_5_name]=&ADC_channel_5,
+	[ADC_channel_0_name]=&ADC_channel[0],
+	[ADC_channel_1_name]=&ADC_channel[1],
+	[ADC_channel_2_name]=&ADC_channel[2],
+	[ADC_channel_3_name]=&ADC_channel[3],
+	[ADC_channel_4_name]=&ADC_channel[4],
+	[ADC_channel_5_name]=&ADC_channel[5],
 	[Temperature_name]=&Temperature,
 	[Pressure_name]=&Pressure,
 	[Pressure_Ag_name]=&Pressure_Ag,
@@ -102,7 +98,7 @@ uint32_t GV_LINKS[NUMBER_OF_VARIABLES]={
 	[current_4_20mA_name]=&current_4_20mA,
 	[voltage_measure_name]=&voltage_measure,
 	[Kdiv_name]=&Kdiv,
-	[ADC_channel_OFF_name]=&ADC_channel_OFF,
+	[ADC_channel_OFF_name]=&ADC_channel[6],
 	[ERROR_name]=&ERROR_REG,
 };
 

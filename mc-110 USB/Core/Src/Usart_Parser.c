@@ -2,7 +2,7 @@
 #include "Usart_Parser.h"
 
 
-#define NUMBER_OF_COMMANDS 14
+#define NUMBER_OF_COMMANDS 38
 
 uint8_t CSV_format = 0;
 extern UART_HandleTypeDef huart1;
@@ -24,6 +24,30 @@ enum Main_Command{
 	BL_BRIDGE,
 	BL_CONFIG,
 	CREATE,
+	ID_CMD,
+	A_CMD,
+	B_CMD,
+	FUN_CMD,
+	UNITS_CMD,
+	RANGE_CMD,
+	UNITSXX_CMD,
+	FUNXXY_CMD,
+	ACCURACYST_CMD,
+	ZERO_CMD,
+	ZEROV_CMD,
+	ZEROI_CMD,
+	ZEROX_CMD,
+	ZEROVX_CMD,
+	ZEROIX_CMD,
+	DEFAULT_CMD,
+	RANGEMIN_CMD,
+	RANGEMAX_CMD,
+	TAREON_CMD,
+	TAREOFF_CMD,
+	TAREX_CMD,
+	PEAKMIN_CMD,
+	PEAKMAX_CMD,
+	PEAKRESET_CMD,
 };
 
 const char* COMMAND_STRING[NUMBER_OF_COMMANDS]=
@@ -42,6 +66,30 @@ const char* COMMAND_STRING[NUMBER_OF_COMMANDS]=
 	[BL_BRIDGE]="BL_BRIDGE",
 	[BL_CONFIG]="BL_CONFIG",
 	[CREATE]="CREATE",
+	[ID_CMD]="ID?",
+	[A_CMD]="A?",
+	[B_CMD]="B?",
+	[FUN_CMD]="Fun?",
+	[UNITS_CMD]="Units?",
+	[RANGE_CMD]="Range?",
+	[UNITSXX_CMD]="Units",
+	[FUNXXY_CMD]="Fun_",
+	[ACCURACYST_CMD]="Accuracyst?",
+	[ZERO_CMD]="Zero",
+	[ZEROV_CMD]="ZeroV",
+	[ZEROI_CMD]="ZeroI",
+	[ZEROX_CMD]="Zero?",
+	[ZEROVX_CMD]="ZeroV?",
+	[ZEROIX_CMD]="ZeroI?",
+	[DEFAULT_CMD]="Default",
+	[RANGEMIN_CMD]="Rangemin?",
+	[RANGEMAX_CMD]="Rangemax?",
+	[TAREON_CMD]="Tareon",
+	[TAREOFF_CMD]="Tareoff",
+	[TAREX_CMD]="Tare?",
+	[PEAKMIN_CMD]="Peakmin?",
+	[PEAKMAX_CMD]="Peakmax?",
+	[PEAKRESET_CMD]="Peakreset",
 };
 
 const uint8_t COMMAND_NUM_OF_SYM[NUMBER_OF_COMMANDS]=
@@ -60,6 +108,30 @@ const uint8_t COMMAND_NUM_OF_SYM[NUMBER_OF_COMMANDS]=
 	[BL_BRIDGE]=9,
 	[BL_CONFIG]=9,
 	[CREATE]=6,
+	[ID_CMD]=3,
+	[A_CMD]=2,
+	[B_CMD]=2,
+	[FUN_CMD]=4,
+	[UNITS_CMD]=6,
+	[RANGE_CMD]=6,
+	[UNITSXX_CMD]=5,
+	[FUNXXY_CMD]=4,
+	[ACCURACYST_CMD]=11,
+	[ZERO_CMD]=4,
+	[ZEROV_CMD]=5,
+	[ZEROI_CMD]=5,
+	[ZEROX_CMD]=5,
+	[ZEROVX_CMD]=6,
+	[ZEROIX_CMD]=6,
+	[DEFAULT_CMD]=7,
+	[RANGEMIN_CMD]=9,
+	[RANGEMAX_CMD]=9,
+	[TAREON_CMD]=6,
+	[TAREOFF_CMD]=7,
+	[TAREX_CMD]=5,
+	[PEAKMIN_CMD]=8,
+	[PEAKMAX_CMD]=8,
+	[PEAKRESET_CMD]=9,
 };
 
 char rx_buf[APP_RX_DATA_SIZE];
@@ -139,7 +211,7 @@ void OneCommParseCycle(uint8_t com, const char* compare, uint8_t offset, uint8_t
 	}}
 }
 
-uint8_t parser(uint8_t offset)
+uint16_t parser(uint8_t offset)
 {
 	uint8_t i;
 	ANSWER=0xFFFF;
@@ -382,18 +454,6 @@ void Get_double(double*arr, uint8_t offset, uint16_t size)
 
 
 
-const char CSV_ON_instruction[]="CSV_ON\t\tВключить формат выходных данных в формате CSV\n";
-const char CSV_OFF_instruction[]="CSV_OFF\t\tВыключить формат выходных данных в формате CSV\n";
-const char HELP_instruction[]="HELP\t\tВыдать это сообщение\n";
-const char GV_instruction[]="GV\t\tВыдать таблицу с доступными переменными\n";
-const char SET_instruction[]="SET name X\tУстановить значение Х переменной с именем name\n";
-const char GET_instruction[]="GET name X\tПолучить значение переменной name с индексом X\n";
-const char ALL_instruction[]="GET name ALL\tПолучить все значения переменной name\n";
-const char SAVE_instruction[]="SAVE name\tСохранить значение переменной name в память\n";
-
-
-
-
 void Parser_process(void)
 {
 	uint16_t RES=0,i;
@@ -430,7 +490,74 @@ void Parser_process(void)
 			switch(parser(0))
 			{
 				case 0xFFFF: break;
-				case 0xFFFE: CDC_Transmit_FS((unsigned char*)COMMAND_STRING[UNKNOWING_CMD], COMMAND_NUM_OF_SYM[UNKNOWING_CMD]); clear_buf(); break;
+				case 0xFFFE: CDC_Transmit_FS((unsigned char*)COMMAND_STRING[UNKNOWING_CMD], (uint8_t)COMMAND_NUM_OF_SYM[UNKNOWING_CMD]); clear_buf(); break;
+
+				// Информация о модели
+				case ID_CMD: CDC_Transmit_FS((unsigned char*)"METROL 110 USB", 14); clear_buf(); break;
+				// Получить текущее значение давления
+				case A_CMD: sprintf((char*)RAM, "%f ", Pressure);
+				CDC_Transmit_FS((unsigned char*)RAM, strlen((char*)RAM));
+				CDC_Transmit_FS((unsigned char*)UNITS_NAME[Units], strlen(UNITS_NAME[Units]));
+				clear_buf(); break;
+				// Получить текущее значение электрического параметра
+				case B_CMD:
+				switch(E_fun)
+				{
+					case mA: sprintf((char*)RAM, "%f ", current_4_20mA-Current_zero); break;
+					case V: sprintf((char*)RAM, "%f ", voltage_measure-Voltage_zero); break;
+					case SW: sprintf((char*)RAM, "%d ", SW_state); break;
+				}
+				CDC_Transmit_FS((unsigned char*)RAM, strlen((char*)RAM));
+				CDC_Transmit_FS((unsigned char*)E_UNITS_NAME[E_fun], strlen(E_UNITS_NAME[E_fun]));
+				clear_buf(); break;
+				// Получить наименование электрического параметра
+				case FUN_CMD:
+					CDC_Transmit_FS((unsigned char*)E_UNITS_NAME[E_fun], strlen(E_UNITS_NAME[E_fun]));
+					clear_buf(); break;
+				// Текущая единица измерения
+				case UNITS_CMD:
+					CDC_Transmit_FS((unsigned char*)UNITS_NAME[Units], strlen(UNITS_NAME[Units]));
+					clear_buf(); break;
+				// Получить количество диапазонов измерения давления и значения этих диапазонов
+				case RANGE_CMD:
+
+					clear_buf(); break;
+				// Смена единицы измерения давления
+				case UNITSXX_CMD: clear_buf(); break;
+				// Смена функции измерения напряжения, тока, контроля внешних контактов
+				case FUNXXY_CMD: clear_buf(); break;
+				// Класс точности манометра
+				case ACCURACYST_CMD: clear_buf(); break;
+				// Обнуление показаний давления
+				case ZERO_CMD: clear_buf(); break;
+				// Обнуление показаний напряжения
+				case ZEROV_CMD: clear_buf(); break;
+				// Обнуление показаний тока
+				case ZEROI_CMD: clear_buf(); break;
+				// Показать смещение нуля давления
+				case ZEROX_CMD: clear_buf(); break;
+				// Показать смещение нуля напряжения
+				case ZEROVX_CMD: clear_buf(); break;
+				// Показать смещение нуля тока
+				case ZEROIX_CMD: clear_buf(); break;
+				// Сброс на заводские настройки
+				case DEFAULT_CMD: clear_buf(); break;
+				// Нижний предел измерения давления
+				case RANGEMIN_CMD: clear_buf(); break;
+				// Верхний предел измерения давления
+				case RANGEMAX_CMD: clear_buf(); break;
+				// Включение функции относительного измерения давления
+				case TAREON_CMD: clear_buf(); break;
+				// Выключение функции относительного измерения давления
+				case TAREOFF_CMD: clear_buf(); break;
+				// Получить значение точки отсчета давления для функции TARE
+				case TAREX_CMD: clear_buf(); break;
+				// Получить минимальное измеренное значение давления за сеанс
+				case PEAKMIN_CMD: clear_buf(); break;
+				// Получить максимальное измеренное значение давления за сеанс
+				case PEAKMAX_CMD: clear_buf(); break;
+				// Сбросить макс. и мин. значения давления за сеанс
+				case PEAKRESET_CMD: clear_buf(); break;
 
 				case BL_BRIDGE:
 					CDC_Transmit_FS((unsigned char*)"BlueTooth Bridge Enabled", 24);
@@ -473,18 +600,6 @@ void Parser_process(void)
 
 				case CSV_ON: CSV_format=1; clear_buf(); CDC_Transmit_FS((unsigned char*)"CSV enabled", 11); HAL_UART_Transmit(&huart1, (unsigned char*)"CSV enabled", 11, 1000); break;
 				case CSV_OFF: CSV_format=0; clear_buf(); CDC_Transmit_FS((unsigned char*)"CSV disabled", 12); HAL_UART_Transmit(&huart1, (unsigned char*)"CSV disabled", 12, 1000); break;
-
-				case HELP:
-					CDC_Transmit_FS((unsigned char*)CSV_ON_instruction, strlen(CSV_ON_instruction));
-					CDC_Transmit_FS((unsigned char*)CSV_OFF_instruction, strlen(CSV_OFF_instruction));
-					CDC_Transmit_FS((unsigned char*)HELP_instruction, strlen(HELP_instruction));
-					CDC_Transmit_FS((unsigned char*)GV_instruction, strlen(GV_instruction));
-					CDC_Transmit_FS((unsigned char*)SET_instruction, strlen(SET_instruction));
-					CDC_Transmit_FS((unsigned char*)GET_instruction, strlen(GET_instruction));
-					CDC_Transmit_FS((unsigned char*)ALL_instruction, strlen(ALL_instruction));
-					CDC_Transmit_FS((unsigned char*)SAVE_instruction, strlen(SAVE_instruction));
-
-					clear_buf(); break;
 
 				case GV:
 					if(CSV_format==0)

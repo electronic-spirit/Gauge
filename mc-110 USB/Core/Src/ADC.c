@@ -3,7 +3,7 @@
 #include "math.h"
 #include "u8g2_LCD.h"
 
-#define adc_timeout_const	5
+#define adc_timeout_const	25
 
 
 extern u8g2_t u8g2;
@@ -21,6 +21,8 @@ uint16_t ADC_counter = 0;										// Счетчик кольцевых буфе
 uint8_t calibr_process = 0;										// Устанавливается в 1 когда идет калибровка
 uint8_t read_off_gain = 0;
 uint8_t start_packet=0;
+uint8_t current_adc_channel = 6;								// Текущий опрашиваемый канал АЦП
+
 
 void Measure_Kdiv(void);
 
@@ -128,7 +130,7 @@ void Auto_System_Calibration(void)
 	int32_t DYNAMIC_BAND_MAX[9]={0,0,0,0,0,0,0,0,0};
 	int32_t DYNAMIC_BAND_MIN[9]={0,0,0,0,0,0,0,0,0};
 	uint8_t RES=0;
-	int64_t SUM[6]={0,0,0,0,0,0};
+	//int64_t SUM[6]={0,0,0,0,0,0};
 
 	// Читаем калибровочные данные из внешнего регистра
 //	aTxBuffer[0] = 0x10;
@@ -232,7 +234,7 @@ void ADC_init(void)
 {
 	uint8_t aTxBuffer[4], aRxBuffer[4];
 	uint32_t data=0xFFFFFFFF;
-	uint16_t i;
+	uint16_t i=0;
 
 	// Reset
 	aTxBuffer[0] = 0x30;
@@ -242,50 +244,79 @@ void ADC_init(void)
 	HAL_SPI_TransmitReceive(&hspi1, (uint8_t*)aTxBuffer, (uint8_t *)aRxBuffer, 1, 1000);
 	ADC_NCS_NOT_ACTIVE();
 
-	while(i<10000)
+	while(i<1000)
 	{
 		data=ADC_Read_STAT();
 		i++;
 	}
 	if(data!=152) ERROR_REG=(1<<ADC_err);
 
-	// Настройка АЦП
-	aTxBuffer[0] = 0x09;
-	ADC_Write_REG(SEQ_REG, aTxBuffer, 1);
-
-	aTxBuffer[0] = 0x0E;
-	aTxBuffer[1] = 0x0A;
-	aTxBuffer[2] = 0x06;
-	ADC_Write_REG(CHMAP0_REG, aTxBuffer, 3);
-
-	aTxBuffer[0] = 0x1A;
-	aTxBuffer[1] = 0x16;
-	aTxBuffer[2] = 0x12;
-	ADC_Write_REG(CHMAP1_REG, aTxBuffer, 3);
-
-	aTxBuffer[0] = 0x02;
-	ADC_Write_REG(CTRL1_REG, aTxBuffer, 1);
+//	// Настройка АЦП
+//	aTxBuffer[0] = 0x09;
+//	ADC_Write_REG(SEQ_REG, aTxBuffer, 1);
+//
+//	aTxBuffer[0] = 0x0E;
+//	aTxBuffer[1] = 0x0A;
+//	aTxBuffer[2] = 0x06;
+//	ADC_Write_REG(CHMAP0_REG, aTxBuffer, 3);
+//
+//	aTxBuffer[0] = 0x1A;
+//	aTxBuffer[1] = 0x16;
+//	aTxBuffer[2] = 0x12;
+//	ADC_Write_REG(CHMAP1_REG, aTxBuffer, 3);
+//
+//	aTxBuffer[0] = 0x02;
+//	ADC_Write_REG(CTRL1_REG, aTxBuffer, 1);
 
 	// Self calibration
 	LED(1,0,0);
 	aTxBuffer[0] = 0x01;
 	ADC_Write_REG(SEQ_REG, aTxBuffer, 1);
-	ADC_Calibration(adc_calibration_mode);
+	ADC_Calibration(self_calibration);
 	delay_ms(300);
 	aTxBuffer[0] = 0x09;
 	ADC_Write_REG(SEQ_REG, aTxBuffer, 1);
 
-	ADC_PGA_Set(PGA_GAIN);
-	ADC_Conversion(ADC_SPS);
 
 	delay_ms(1500);
 	//Auto_System_Calibration();
 
-	ADC_PGA_Set(PGA_GAIN);
-	ADC_Conversion(ADC_SPS);
+//	ADC_PGA_Set(PGA_GAIN);
+//	ADC_Conversion(ADC_SPS);
 
 	LED(0,0,0);
+
+	ADC_PGA_Set(PGA_GAIN[current_adc_channel]);
+		ADC_Start_Conversion(current_adc_channel, ADC_SPS);
 }
+
+
+
+void Continue_Converting(void)
+{
+	uint8_t i=0;
+
+	// Сдвигаем буфер
+	for(i=0;i<ADC_Buff_size-1;i++) ADC_channel[current_adc_channel][i]=ADC_channel[current_adc_channel][i+1];
+	// Читаем значение
+	if(current_adc_channel==6) ADC_channel[current_adc_channel][ADC_Buff_size-1]=ADC_Read_DATA(5);
+	else ADC_channel[current_adc_channel][ADC_Buff_size-1]=ADC_Read_DATA(current_adc_channel);
+
+	// Считаем заполнение буфера текущего канала
+	if(++adc_full_buff==ADC_Buff_size)
+	{
+		if(++current_adc_channel==7)current_adc_channel=0;
+		adc_full_buff=0;
+	}
+
+	// Стартуем преобразование
+	ADC_PGA_Set(PGA_GAIN[current_adc_channel]);
+	if(current_adc_channel==6) ADC_Start_Conversion(5, ADC_SPS);
+	else ADC_Start_Conversion(current_adc_channel, ADC_SPS);
+
+	adc_timeout=adc_timeout_const;
+}
+
 
 
 void ADC_PGA_Set(uint8_t pga_data)
@@ -301,6 +332,9 @@ void ADC_PGA_Set(uint8_t pga_data)
 
 void ADC_EXT(void)
 {
+	Continue_Converting();
+
+	/*
 	uint16_t i=0;
 
 //	if(adc_full_buff>2)
@@ -313,20 +347,20 @@ void ADC_EXT(void)
 			{
 				for(i=0;i<ADC_Buff_size-1;i++)
 				{
-					ADC_channel_0[i]=ADC_channel_0[i+1];
-					ADC_channel_1[i]=ADC_channel_1[i+1];
-					ADC_channel_2[i]=ADC_channel_2[i+1];
-					ADC_channel_3[i]=ADC_channel_3[i+1];
-					ADC_channel_4[i]=ADC_channel_4[i+1];
-					ADC_channel_5[i]=ADC_channel_5[i+1];
+					ADC_channel[0][i]=ADC_channel[0][i+1];
+					ADC_channel[1][i]=ADC_channel[1][i+1];
+					ADC_channel[2][i]=ADC_channel[2][i+1];
+					ADC_channel[3][i]=ADC_channel[3][i+1];
+					ADC_channel[4][i]=ADC_channel[4][i+1];
+					ADC_channel[5][i]=ADC_channel[5][i+1];
 				}
 
-				ADC_channel_0[ADC_Buff_size-1]=ADC_data[0];
-				ADC_channel_1[ADC_Buff_size-1]=ADC_data[1];
-				ADC_channel_2[ADC_Buff_size-1]=ADC_data[2];
-				ADC_channel_3[ADC_Buff_size-1]=ADC_data[3];
-				ADC_channel_4[ADC_Buff_size-1]=ADC_data[4];
-				ADC_channel_5[ADC_Buff_size-1]=ADC_data[5];
+				ADC_channel[0][ADC_Buff_size-1]=ADC_data[0];
+				ADC_channel[1][ADC_Buff_size-1]=ADC_data[1];
+				ADC_channel[2][ADC_Buff_size-1]=ADC_data[2];
+				ADC_channel[3][ADC_Buff_size-1]=ADC_data[3];
+				ADC_channel[4][ADC_Buff_size-1]=ADC_data[4];
+				ADC_channel[5][ADC_Buff_size-1]=ADC_data[5];
 			}
 			adc_full_buff++;
 //			else
@@ -369,8 +403,11 @@ void ADC_EXT(void)
 	if(AutoAmpCoef==1)Measure_Kdiv();
 	else Kdiv=devider;
 
+	new_cal_tim++;
+
 	adc_timeout=adc_timeout_const;
 	ADC_Conversion(ADC_SPS);
+	*/
 }
 
 
@@ -393,7 +430,7 @@ void Measure_Kdiv(void)
 	{
 		if(adc_full_buff>=(AutoOffCoef_period+1))
 		{
-			ADC_PGA_Set(PGA_GAIN);
+			ADC_PGA_Set(PGA_GAIN[0]);
 			//ADC_Conversion(ADC_SPS);
 			adc_full_buff=0;
 			read_off_gain=0;
@@ -404,105 +441,103 @@ void Measure_Kdiv(void)
 }
 
 
+
+
+
 void ADC_process(void)
 {
-	uint16_t i=0;
+	uint16_t i=0, j=0;
 	uint8_t aTxBuffer[4];
 	int64_t SUM[7]={0,0,0,0,0,0};
 
+
 	// Скользящее среднее
 	for(i=0;i<ADC_Buff_size;i++)
-	{
-		SUM[0]+=ADC_channel_0[i];
-		SUM[1]+=ADC_channel_1[i];
-		SUM[2]+=ADC_channel_2[i];
-		SUM[3]+=ADC_channel_3[i];
-		SUM[4]+=ADC_channel_4[i];
-		SUM[5]+=ADC_channel_5[i];
-		SUM[6]+=ADC_channel_OFF[i];
-	}
-	for(i=0;i<7;i++) ADC_middle[i]=SUM[i]/ADC_Buff_size;
-
-	//for(i=0;i<7;i++) ADC_middle[i]*=Kag[i];
-
-	// Перезапуск АЦП если нет ответа в течении adc_timeout_const
-	if(adc_timeout>0)adc_timeout--;
-	else
-	{
-		// Настройка АЦП
-		aTxBuffer[0] = 0x09;
-		ADC_Write_REG(SEQ_REG, aTxBuffer, 1);
-		aTxBuffer[0] = 0x0E;
-		aTxBuffer[1] = 0x0A;
-		aTxBuffer[2] = 0x06;
-		ADC_Write_REG(CHMAP0_REG, aTxBuffer, 3);
-		aTxBuffer[0] = 0x1A;
-		aTxBuffer[1] = 0x16;
-		aTxBuffer[2] = 0x12;
-		ADC_Write_REG(CHMAP1_REG, aTxBuffer, 3);
-		aTxBuffer[0] = 0x02;
-		ADC_Write_REG(CTRL1_REG, aTxBuffer, 1);
-		// Self calibration
-		aTxBuffer[0] = 0x01;
-		ADC_Write_REG(SEQ_REG, aTxBuffer, 1);
-		ADC_Calibration(adc_calibration_mode);
-		delay_ms(300);
-		aTxBuffer[0] = 0x09;
-		ADC_Write_REG(SEQ_REG, aTxBuffer, 1);
-
-		ADC_Conversion(ADC_SPS);
-		adc_timeout=adc_timeout_const;
-		ERROR_REG|=(0x01<<ADC_err);
-	}
+	{ for(j=0;j<7;j++) SUM[j]+=ADC_channel[j][i]; }
+	for(i=0;i<7;i++) ADC_middle[i]=(SUM[i]/ADC_Buff_size);
 
 
-	if(adc_start_calibration==0)
-	{
-		if(adc_timeout_cal>0)
+		// Перезапуск АЦП если нет ответа в течении adc_timeout_const
+		if(adc_timeout>0)adc_timeout--;
+		else
 		{
-			adc_timeout_cal--;
-			if(adc_timeout_cal==0)
+			// Настройка АЦП
+//			aTxBuffer[0] = 0x09;
+//			ADC_Write_REG(SEQ_REG, aTxBuffer, 1);
+//			aTxBuffer[0] = 0x0E;
+//			aTxBuffer[1] = 0x0A;
+//			aTxBuffer[2] = 0x06;
+//			ADC_Write_REG(CHMAP0_REG, aTxBuffer, 3);
+//			aTxBuffer[0] = 0x1A;
+//			aTxBuffer[1] = 0x16;
+//			aTxBuffer[2] = 0x12;
+//			ADC_Write_REG(CHMAP1_REG, aTxBuffer, 3);
+//			aTxBuffer[0] = 0x02;
+//			ADC_Write_REG(CTRL1_REG, aTxBuffer, 1);
+			// Self calibration
+			aTxBuffer[0] = 0x01;
+			ADC_Write_REG(SEQ_REG, aTxBuffer, 1);
+			ADC_Calibration(adc_calibration_mode);
+			delay_ms(300);
+			aTxBuffer[0] = 0x09;
+			ADC_Write_REG(SEQ_REG, aTxBuffer, 1);
+
+//			ADC_Conversion(ADC_SPS);
+			adc_timeout=adc_timeout_const;
+			ADC_PGA_Set(PGA_GAIN[current_adc_channel]);
+			ADC_Start_Conversion(current_adc_channel, ADC_SPS);
+			ERROR_REG|=(0x01<<ADC_err);
+		}
+
+
+		if(adc_start_calibration==0)
+		{
+			if(adc_timeout_cal>0)
 			{
-				// Стартуем преобразование
-				aTxBuffer[0] = 0x09;
-				ADC_Write_REG(SEQ_REG, aTxBuffer, 1);
-				ADC_Conversion(DATA_RATE_16SPS);
-				LED(0,0,0);
+				adc_timeout_cal--;
+				if(adc_timeout_cal==0)
+				{
+					// Стартуем преобразование
+					aTxBuffer[0] = 0x09;
+					ADC_Write_REG(SEQ_REG, aTxBuffer, 1);
+					ADC_Conversion(DATA_RATE_16SPS);
+					LED(0,0,0);
+				}
 			}
 		}
-	}
-	// Калибровка
-	else
-	{
-		LED(1,0,0);
-		adc_start_calibration=0;
-		aTxBuffer[0] = 0x01;
-		if(adc_calibration_mode==offset_calibration)aTxBuffer[0]+=(0<<5); 		// Ноль это канал по которому производится калибровка
-		if(adc_calibration_mode==full_scale_calibration)aTxBuffer[0]+=(5<<5);	// Ноль это канал по которому производится калибровка
-		ADC_Write_REG(SEQ_REG, aTxBuffer, 1);
-		ADC_Calibration(adc_calibration_mode);
-		adc_timeout_cal=50;
-	}
-	// Делитель для PGA
-	if(PGA_GAIN==0)devider=1;
-	else devider= (0x01<<(PGA_GAIN-1));
+		// Калибровка
+		else
+		{
+			LED(1,0,0);
+			adc_start_calibration=0;
+			aTxBuffer[0] = 0x01;
+			if(adc_calibration_mode==offset_calibration)aTxBuffer[0]+=(0<<5); 		// Ноль это канал по которому производится калибровка
+			if(adc_calibration_mode==full_scale_calibration)aTxBuffer[0]+=(5<<5);	// Ноль это канал по которому производится калибровка
+			ADC_Write_REG(SEQ_REG, aTxBuffer, 1);
+			ADC_Calibration(adc_calibration_mode);
+			adc_timeout_cal=50;
+		}
+		// Делитель для PGA
+		if(PGA_GAIN[0]==0)devider=1;
+		else devider= (0x01<<(PGA_GAIN[0]-1));
 
+		Kdiv=(double)ADC_middle[5]/(double)ADC_middle[6];
 
-	ADC_volt[0]=ADC_middle[0]*((RefVoltage*1000)/(8388608*Kdiv));
-	ADC_volt[1]=ADC_middle[1]*((RefVoltage*1000)/(8388608*Kdiv));
-	ADC_volt[2]=ADC_middle[2]*((RefVoltage*1000)/(8388608*Kdiv));
-	ADC_volt[3]=ADC_middle[3]*((RefVoltage*1000)/(8388608*Kdiv));
-	ADC_volt[4]=ADC_middle[4]*((RefVoltage*1000)/(8388608*Kdiv));
-	ADC_volt[5]=ADC_middle[5]*((RefVoltage*1000)/(8388608*Kdiv));
+		ADC_volt[0]=ADC_middle[0]*((RefVoltage*1000)/(8388608*Kdiv));
+		ADC_volt[1]=ADC_middle[1]*((RefVoltage*1000)/(8388608*Kdiv));
+		ADC_volt[2]=ADC_middle[2]*((RefVoltage*1000)/(8388608*Kdiv));
+		ADC_volt[3]=ADC_middle[3]*((RefVoltage*1000)/(8388608*Kdiv));
+		ADC_volt[4]=ADC_middle[4]*((RefVoltage*1000)/(8388608*Kdiv));
+		ADC_volt[5]=ADC_middle[5]*((RefVoltage*1000)/(8388608*Kdiv));
 
-	// Заводской номер 001
-	current_4_20mA = calculate_current(ADC_volt[0]);
-	voltage_measure = calculate_voltage(ADC_volt[1]);
+		// Заводской номер 001
+		current_4_20mA = calculate_current(ADC_volt[0]);
+		voltage_measure = calculate_voltage(ADC_volt[1]);
 
-	Approximation_MC110(ADC_middle[3], ADC_middle[4]);
-	Calculate(ADC_middle[3], ADC_middle[4]);
+		Approximation_MC110(ADC_middle[3], ADC_middle[4]);
+		Calculate(ADC_middle[3], ADC_middle[4]);
 
-	sleep(100);
+	sleep(50);
 }
 
 
@@ -516,7 +551,6 @@ float HEX2FLOAT(uint32_t hex)
 
 	if((hex>>31)==1)s=-1;
 	e = (hex >> 23) & 0xFF;
-
 
 	if(e!=0) m = ((hex & 0x7FFFFF ) | 0x800000);
 	else     m = ((hex & 0x7FFFFF ) << 1);

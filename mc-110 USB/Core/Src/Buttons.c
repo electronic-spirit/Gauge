@@ -150,14 +150,15 @@ void Button_S3_press_callback(void)
 	off_sec=off_min=0;
 	light_sec=light_min=0;
 	// Таррирование электрики
-	if(Electric_zero==0)
 	switch(E_fun)
 	{
-		case 0: Electric_zero=Test_Pressure; break;
-		case 1: Electric_zero=current_4_20mA; break;
-		case 2: Electric_zero=voltage_measure; break;
+		case mA:
+			if(Current_zero==0) Current_zero=current_4_20mA;
+			else Current_zero=0;
+			break;
+		case V: if(Voltage_zero==0)Voltage_zero=voltage_measure;
+		else Voltage_zero=0; break;
 	}
-	else Electric_zero=0;
 }
 
 
@@ -296,7 +297,6 @@ void Button_S10_press_callback(void)
 	light_sec=light_min=0;
 	// Переключение отображения второй строки
 	if(++E_fun==3)E_fun=0;
-	Electric_zero=0;
 }
 
 //--------------------------------------------------------------------------------------------------------

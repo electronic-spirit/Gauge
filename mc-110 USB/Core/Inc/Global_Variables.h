@@ -61,13 +61,7 @@ enum TypeVariables{
 extern int32_t ADC_data[6];
 extern double ADC_volt[6];
 // Кольцевые буферы для АЦП
-extern int32_t ADC_channel_1[ADC_BUFF_SIZE];
-extern int32_t ADC_channel_2[ADC_BUFF_SIZE];
-extern int32_t ADC_channel_3[ADC_BUFF_SIZE];
-extern int32_t ADC_channel_4[ADC_BUFF_SIZE];
-extern int32_t ADC_channel_5[ADC_BUFF_SIZE];
-extern int32_t ADC_channel_0[ADC_BUFF_SIZE];
-extern int32_t ADC_channel_OFF[ADC_BUFF_SIZE];
+extern int32_t ADC_channel[7][ADC_BUFF_SIZE];
 extern int32_t ADC_middle[7];
 extern double Pressure_zero;
 extern double Pressure;
@@ -85,7 +79,8 @@ extern uint8_t BLE_config;
 
 extern double MCU_temp;
 extern uint8_t E_fun;
-extern double Electric_zero;
+extern double Voltage_zero;			// Обнуление Напряжения
+extern double Current_zero;			// Обнуление тока
 
 extern double Temperature;
 extern double Temperature2;
@@ -96,6 +91,7 @@ extern double Test_Pressure;
 extern int32_t zero_ADC[6];
 extern double current_4_20mA;
 extern double voltage_measure;
+extern uint8_t SW_state;
 
 extern uint8_t AutoAmpCoef; 	// Пересчет реального делителя для Тимура
 extern uint16_t AutoOffCoef_period;
@@ -116,7 +112,7 @@ extern uint8_t PV;							// P+V
 extern uint8_t PI;							// P+I
 extern uint8_t PE;							// P+E
 
-extern uint8_t PGA_GAIN;
+extern uint8_t PGA_GAIN[7];
 extern uint8_t ADC_SPS;
 extern uint8_t adc_calibration_mode;
 extern uint16_t ADC_Buff_size;
@@ -136,6 +132,7 @@ extern uint8_t logging_len;
 extern uint8_t logging_num;
 
 extern uint8_t Sound_Vol;
+extern uint8_t Units;
 
 //--------------------------------------------------------------------------------------------
 //										   Parser Variables

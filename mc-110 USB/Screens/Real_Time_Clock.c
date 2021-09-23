@@ -40,7 +40,11 @@ void RTC_view(void)
 	if(Pressure_zero!=0)DrawImage(tara_icon, 194, 2, 1);
 
 	//El tarring
-	if(Electric_zero!=0)DrawImage(eltara_icon, 176, 2, 1);
+	switch(E_fun)
+	{
+		case mA: if(Current_zero!=0)DrawImage(eltara_icon, 176, 2, 1); break;
+		case V: if(Voltage_zero!=0)DrawImage(eltara_icon, 176, 2, 1); break;
+	}
 
 	// Battery
 	for(i=0;i<128;i++)bat_sum+=Vbat_uint[i];

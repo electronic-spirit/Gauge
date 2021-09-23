@@ -50,10 +50,11 @@ Core/Src/stm32l4xx_it.o: ../Core/Src/stm32l4xx_it.c ../Core/Inc/main.h \
  ../Screens/Auto_Off_option.h ../Screens/about_screen_options.h \
  ../Core/Inc/temperature.h ../Screens/logging_option_screen.h \
  ../Core/Inc/calibration.h ../Core/Inc/logging_fatfs.h \
- ../Core/Inc/sound.h ../Core/Inc/MAX77960.h ../Core/Inc/stm32l4xx_it.h \
- ../Core/Inc/Usart_Parser.h ../USB_LIB/usbd_cdc_if.h \
- ../USB_LIB/usbd_cdc.h ../USB_LIB/usbd_ioreq.h ../USB_LIB/usbd_def.h \
- ../USB_LIB/usbd_conf.h ../USB_LIB/usbd_core.h ../USB_LIB/usbd_ctlreq.h
+ ../Core/Inc/sound.h ../Core/Inc/MAX77960.h ../Core/Inc/Units_Converter.h \
+ ../Core/Inc/stm32l4xx_it.h ../Core/Inc/Usart_Parser.h \
+ ../USB_LIB/usbd_cdc_if.h ../USB_LIB/usbd_cdc.h ../USB_LIB/usbd_ioreq.h \
+ ../USB_LIB/usbd_def.h ../USB_LIB/usbd_conf.h ../USB_LIB/usbd_core.h \
+ ../USB_LIB/usbd_ctlreq.h
 
 ../Core/Inc/main.h:
 
@@ -188,6 +189,8 @@ Core/Src/stm32l4xx_it.o: ../Core/Src/stm32l4xx_it.c ../Core/Inc/main.h \
 ../Core/Inc/sound.h:
 
 ../Core/Inc/MAX77960.h:
+
+../Core/Inc/Units_Converter.h:
 
 ../Core/Inc/stm32l4xx_it.h:
 

@@ -51,7 +51,7 @@ Core/Src/MAX77960.o: ../Core/Src/MAX77960.c ../Core/Inc/MAX77960.h \
  ../Screens/Auto_Off_option.h ../Screens/about_screen_options.h \
  ../Core/Inc/temperature.h ../Screens/logging_option_screen.h \
  ../Core/Inc/calibration.h ../Core/Inc/logging_fatfs.h \
- ../Core/Inc/sound.h ../Core/Inc/MAX77960.h
+ ../Core/Inc/sound.h ../Core/Inc/MAX77960.h ../Core/Inc/Units_Converter.h
 
 ../Core/Inc/MAX77960.h:
 
@@ -188,3 +188,5 @@ Core/Src/MAX77960.o: ../Core/Src/MAX77960.c ../Core/Inc/MAX77960.h \
 ../Core/Inc/sound.h:
 
 ../Core/Inc/MAX77960.h:
+
+../Core/Inc/Units_Converter.h:

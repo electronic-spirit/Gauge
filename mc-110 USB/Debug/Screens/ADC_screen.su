@@ -1,7 +1,7 @@
-ADC_screen.c:12:6:ADC_options_screen_func	16	static
-ADC_screen.c:58:6:ADC_options_screen_S6	4	static
-ADC_screen.c:64:6:ADC_options_screen_S7	4	static
-ADC_screen.c:71:6:ADC_options_screen_S9	4	static
-ADC_screen.c:83:6:ADC_options_screen_S4	8	static
-ADC_screen.c:99:6:ADC_options_screen_S8	8	static
-ADC_screen.c:117:6:ADC_options_screen_S5	8	static
+ADC_screen.c:13:6:ADC_options_screen_func	16	static
+ADC_screen.c:53:6:ADC_options_screen_S6	4	static
+ADC_screen.c:59:6:ADC_options_screen_S7	4	static
+ADC_screen.c:66:6:ADC_options_screen_S9	4	static
+ADC_screen.c:78:6:ADC_options_screen_S4	8	static
+ADC_screen.c:94:6:ADC_options_screen_S8	8	static
+ADC_screen.c:112:6:ADC_options_screen_S5	8	static

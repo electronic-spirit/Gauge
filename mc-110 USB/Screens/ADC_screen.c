@@ -8,6 +8,7 @@ extern u8g2_t u8g2;
 
 const char* SPS_name[16]={ "RATE_2SPS", "RATE_4SPS", "RATE_8SPS", "RATE_16SPS", "RATE_32SPS", "RATE_63SPS", "RATE_125SPS", "RATE_250SPS",
 		"RATE_500SPS", "RATE_1000SPS", "RATE_2000SPS", "RATE_4000SPS", "RATE_8000SPS", "RATE_16000SPS", "RATE_32000SPS", "RATE_64000SPS"};
+const char* CAL_name[4]={"SELF", "OFFSET", "FULL SCALE", "NEW"};
 
 void ADC_options_screen_func(void)
 {
@@ -16,7 +17,7 @@ void ADC_options_screen_func(void)
 
 	// PGA
 	u8g2_DrawUTF8(&u8g2, 10, 40, "PGA:");
-	Blink_Edit_Parameter(120, 40, PGA_name[PGA_GAIN], edit_param, 0);
+	Blink_Edit_Parameter(120, 40, PGA_name[PGA_GAIN[0]], edit_param, 0);
 
 	// SPS
 	u8g2_DrawUTF8(&u8g2, 10, 60, "SPS:");
@@ -24,12 +25,7 @@ void ADC_options_screen_func(void)
 
 	// Calibration
 	u8g2_DrawUTF8(&u8g2, 10, 80, "CAL:");
-	switch(adc_calibration_mode)
-	{
-		case 0: Blink_Edit_Parameter(120, 80, "SELF", edit_param, 2); break;
-		case 1: Blink_Edit_Parameter(120, 80, "OFFSET", edit_param, 2); break;
-		case 2: Blink_Edit_Parameter(120, 80, "FULL SCALE", edit_param, 2); break;
-	}
+	Blink_Edit_Parameter(120, 80, CAL_name[adc_calibration_mode], edit_param, 2);
 
 	// Window size
 	u8g2_DrawUTF8(&u8g2, 10, 100, "SIZE:");
@@ -45,7 +41,6 @@ void ADC_options_screen_func(void)
 	u8g2_DrawUTF8(&u8g2, 10, 140, "GAIN PERIOD:");
 	sprintf(RAM,"%d", AutoGainCoef_period);
 	Blink_Edit_Parameter(160, 140, RAM, edit_param, 5);
-
 
 	u8g2_SendBuffer(&u8g2);
 	u8g2_ClearBuffer(&u8g2);
@@ -84,9 +79,9 @@ void ADC_options_screen_S4(void)
 {
 	switch(edit_param)
 	{
-		case 0: Save_Settings(PGA_GAIN_tag, PGA_GAIN); break;
+		case 0: Save_Settings(PGA_GAIN_tag, PGA_GAIN[0]); break;
 		case 1: Save_Settings(ADC_SPS_tag, ADC_SPS); break;
-		case 2: Save_Settings(adc_calibration_mode_tag, adc_calibration_mode); adc_start_calibration=1; break;
+		case 2: adc_start_calibration=1; break;
 		case 3: Save_Settings(ADC_Buff_size_tag, ADC_Buff_size); break;
 		case 4: Save_Settings(AutoOffCoef_period_tag, AutoOffCoef_period); break;
 		case 5: Save_Settings(AutoGainCoef_period_tag, AutoGainCoef_period); break;
@@ -100,8 +95,8 @@ void ADC_options_screen_S8(void)
 {
 	switch(edit_param)
 	{
-		case 0: if(PGA_GAIN>0)PGA_GAIN--;
-		ADC_PGA_Set(PGA_GAIN);
+		case 0: if(PGA_GAIN[0]>0)PGA_GAIN[0]--;
+		ADC_PGA_Set(PGA_GAIN[0]);
 		ADC_Conversion(ADC_SPS);
 		break;
 		case 1: if(ADC_SPS>0)ADC_SPS--; break;
@@ -118,8 +113,8 @@ void ADC_options_screen_S5(void)
 {
 	switch(edit_param)
 	{
-		case 0: if(PGA_GAIN<8)PGA_GAIN++;
-		ADC_PGA_Set(PGA_GAIN);
+		case 0: if(PGA_GAIN[0]<8)PGA_GAIN[0]++;
+		ADC_PGA_Set(PGA_GAIN[0]);
 		ADC_Conversion(ADC_SPS);
 		break;
 		case 1: if(ADC_SPS<15)ADC_SPS++; break;

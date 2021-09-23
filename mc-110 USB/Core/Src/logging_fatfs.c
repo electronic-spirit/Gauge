@@ -266,7 +266,7 @@ void Load_Settings(void)
 		PV = (uint16_t)Read_Variable_From_File(PV_tag);
 		PI = (uint16_t)Read_Variable_From_File(PI_tag);
 		PE = (uint16_t)Read_Variable_From_File(PE_tag);
-		PGA_GAIN = (uint16_t)Read_Variable_From_File(PGA_GAIN_tag);
+		PGA_GAIN[0] = (uint16_t)Read_Variable_From_File(PGA_GAIN_tag);
 		ADC_SPS = (uint16_t)Read_Variable_From_File(ADC_SPS_tag);
 		adc_calibration_mode = (uint16_t)Read_Variable_From_File(adc_calibration_mode_tag);
 		ADC_Buff_size = (uint16_t)Read_Variable_From_File(ADC_Buff_size_tag);

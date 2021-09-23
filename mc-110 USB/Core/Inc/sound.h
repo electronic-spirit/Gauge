@@ -11,6 +11,6 @@ extern uint16_t buf_tr[64];
 
 void Play_Sound(char*name);
 void StartReadNextSoundBuf(void);
-
+void Sound_process(void);
 
 #endif /* INC_SOUND_H_ */

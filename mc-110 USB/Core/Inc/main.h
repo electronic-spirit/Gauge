@@ -54,6 +54,7 @@ extern "C" {
 #include "logging_fatfs.h"
 #include "sound.h"
 #include "MAX77960.h"
+#include "Units_Converter.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/

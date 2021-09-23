@@ -152,7 +152,7 @@ void Test_screen_func(void)
 	}
 
 	// Индикация АЦП
-	for(i=0;i<6;i++)
+	for(i=0;i<7;i++)
 	{
 		//sprintf(RAM,"%d %+d", i, ADC_channel_0[i]);
 		sprintf((char *)RAM,"%d %+d", i, ADC_middle[i]);
@@ -161,16 +161,16 @@ void Test_screen_func(void)
 
 	switch(adc_calibration_mode)
 	{
-		case 0: u8g2_DrawUTF8(&u8g2, 5, 130, "self_calibration"); break;
-		case 1: u8g2_DrawUTF8(&u8g2, 5, 130, "offset_calibration"); break;
-		case 2: u8g2_DrawUTF8(&u8g2, 5, 130, "full_scale_calibration"); break;
+		case 0: u8g2_DrawUTF8(&u8g2, 5, 140, "SC"); break;
+		case 1: u8g2_DrawUTF8(&u8g2, 5, 140, "OC"); break;
+		case 2: u8g2_DrawUTF8(&u8g2, 5, 140, "FSC"); break;
 	}
 
 	// �?ндикация PGA
-	u8g2_DrawUTF8(&u8g2, 5, 145, PGA_name[PGA_GAIN]);
+	u8g2_DrawUTF8(&u8g2, 5, 155, PGA_name[PGA_GAIN[0]]);
 
 	sprintf((char *)RAM,"%f", Kdiv);
-	u8g2_DrawUTF8(&u8g2, 120, 145, (char *)RAM);
+	u8g2_DrawUTF8(&u8g2, 120, 155, (char *)RAM);
 
 	// Рисуем
 	u8g2_SendBuffer(&u8g2);
