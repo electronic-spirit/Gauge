@@ -7,7 +7,7 @@
 #include "stm32l4xx_hal.h"
 
 
-#define NUMBER_OF_TAGS 34
+#define NUMBER_OF_TAGS 40
 
 enum Main_Tags{
 	end_of_file_tag,
@@ -18,7 +18,13 @@ enum Main_Tags{
 	PV_tag,
 	PI_tag,
 	PE_tag,
-	PGA_GAIN_tag,
+	PGA_GAIN0_tag,
+	PGA_GAIN1_tag,
+	PGA_GAIN2_tag,
+	PGA_GAIN3_tag,
+	PGA_GAIN4_tag,
+	PGA_GAIN5_tag,
+	PGA_GAIN6_tag,
 	ADC_SPS_tag,
 	adc_calibration_mode_tag,
 	ADC_Buff_size_tag,

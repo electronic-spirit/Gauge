@@ -41,7 +41,7 @@ uint8_t AutoAmpCoef = 0;
 uint16_t AutoOffCoef_period;
 uint16_t AutoGainCoef_period;
 double RefVoltage = 3.29923;
-double Kdiv=1.0;												// Реальный коэффициент усиления
+double Kdiv[6];												// Реальный коэффициент усиления
 
 
 //--------------------------------------------------------------------------------------------
@@ -100,6 +100,7 @@ uint32_t GV_LINKS[NUMBER_OF_VARIABLES]={
 	[Kdiv_name]=&Kdiv,
 	[ADC_channel_OFF_name]=&ADC_channel[6],
 	[ERROR_name]=&ERROR_REG,
+	[PGA_GAIN_name]=&PGA_GAIN,
 };
 
 
@@ -125,6 +126,7 @@ const char* GV_STRING[NUMBER_OF_VARIABLES]=
 	[Kdiv_name]="Kdiv",
 	[ADC_channel_OFF_name]="ADC_channel_OFF",
 	[ERROR_name]="Error",
+	[PGA_GAIN_name]="PGA_GAIN",
 };
 
 
@@ -148,6 +150,7 @@ const uint8_t GV_NUM_OF_SYM[NUMBER_OF_VARIABLES]=
 	[Kdiv_name]=4,
 	[ADC_channel_OFF_name]=15,
 	[ERROR_name]=5,
+	[PGA_GAIN_name]=8,
 };
 
 // Тип переменных
@@ -170,6 +173,7 @@ const uint8_t GV_TYPE[NUMBER_OF_VARIABLES]=
 	[Kdiv_name]=type_DOUBLE,
 	[ADC_channel_OFF_name]=type_INT32,
 	[ERROR_name]=type_INT32,
+	[PGA_GAIN_name]=type_UINT8,
 };
 
 
@@ -193,6 +197,7 @@ const uint16_t GV_LENGTH[NUMBER_OF_VARIABLES]=
 	[Kdiv_name]=1,
 	[ADC_channel_OFF_name]=ADC_BUFF_SIZE,
 	[ERROR_name]=1,
+	[PGA_GAIN_name]=7,
 };
 
 

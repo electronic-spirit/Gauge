@@ -8,7 +8,7 @@
 
 
 #define ADC_BUFF_SIZE			512		// Размеры буферов
-#define NUMBER_OF_VARIABLES		17		// Доступные глобальные переменные
+#define NUMBER_OF_VARIABLES		18		// Доступные глобальные переменные
 #define NUMBER_OF_TYPES			8		// Количество типов данных
 
 enum Errors{
@@ -39,6 +39,7 @@ enum GlobalVariables{
 	Kdiv_name,
 	ADC_channel_OFF_name,
 	ERROR_name,
+	PGA_GAIN_name,
 };
 
 
@@ -97,7 +98,7 @@ extern uint8_t AutoAmpCoef; 	// Пересчет реального делите
 extern uint16_t AutoOffCoef_period;
 extern uint16_t AutoGainCoef_period;
 extern double RefVoltage;
-extern double Kdiv;
+extern double Kdiv[6];
 
 //--------------------------------------------------------------------------------------------
 //										       EEPROM

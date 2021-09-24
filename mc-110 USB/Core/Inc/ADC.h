@@ -18,6 +18,7 @@
 #define SGC_REG			0x0B
 #define SCOC_REG		0x0C
 #define SCGC_REG		0x0D
+#define DELAY_REG		0x05
 
 
 #define PGA_GAIN_OFF   		0x00
@@ -78,6 +79,6 @@ extern uint8_t adc_conversion_complete;
 extern uint8_t adc_calibration_mode;
 extern uint8_t adc_start_calibration;
 extern uint8_t adc_timeout;
-extern double Kdiv;
+
 
 #endif /* INC_ADC_H_ */

@@ -15,4 +15,5 @@ Usart_Parser.c:334:6:Get_uint8	24	static
 Usart_Parser.c:363:6:Get_int32	24	static
 Usart_Parser.c:391:6:Get_float	24	static
 Usart_Parser.c:423:6:Get_double	24	static
-Usart_Parser.c:457:6:Parser_process	24	static
+Usart_Parser.c:455:10:Scan_Uint16	24	static
+Usart_Parser.c:474:6:Parser_process	24	static

@@ -69,27 +69,27 @@ const char* COMMAND_STRING[NUMBER_OF_COMMANDS]=
 	[ID_CMD]="ID?",
 	[A_CMD]="A?",
 	[B_CMD]="B?",
-	[FUN_CMD]="Fun?",
-	[UNITS_CMD]="Units?",
-	[RANGE_CMD]="Range?",
-	[UNITSXX_CMD]="Units",
-	[FUNXXY_CMD]="Fun_",
-	[ACCURACYST_CMD]="Accuracyst?",
-	[ZERO_CMD]="Zero",
-	[ZEROV_CMD]="ZeroV",
-	[ZEROI_CMD]="ZeroI",
-	[ZEROX_CMD]="Zero?",
-	[ZEROVX_CMD]="ZeroV?",
-	[ZEROIX_CMD]="ZeroI?",
-	[DEFAULT_CMD]="Default",
-	[RANGEMIN_CMD]="Rangemin?",
-	[RANGEMAX_CMD]="Rangemax?",
-	[TAREON_CMD]="Tareon",
-	[TAREOFF_CMD]="Tareoff",
-	[TAREX_CMD]="Tare?",
-	[PEAKMIN_CMD]="Peakmin?",
-	[PEAKMAX_CMD]="Peakmax?",
-	[PEAKRESET_CMD]="Peakreset",
+	[FUN_CMD]="FUN?",
+	[UNITS_CMD]="UNITS?",
+	[RANGE_CMD]="RANGE?",
+	[UNITSXX_CMD]="UNITS ",
+	[FUNXXY_CMD]="FUN_",
+	[ACCURACYST_CMD]="ACCURACYST?",
+	[ZERO_CMD]="ZERO",
+	[ZEROV_CMD]="ZEROV",
+	[ZEROI_CMD]="ZEROI",
+	[ZEROX_CMD]="ZERO?",
+	[ZEROVX_CMD]="ZEROV?",
+	[ZEROIX_CMD]="ZEROI?",
+	[DEFAULT_CMD]="DEFAULT",
+	[RANGEMIN_CMD]="RANGEMIN?",
+	[RANGEMAX_CMD]="RANGEMAX?",
+	[TAREON_CMD]="TAREON",
+	[TAREOFF_CMD]="TAREOFF",
+	[TAREX_CMD]="TARE?",
+	[PEAKMIN_CMD]="PEAKMIN?",
+	[PEAKMAX_CMD]="PEAKMAX?",
+	[PEAKRESET_CMD]="PEAKRESET",
 };
 
 const uint8_t COMMAND_NUM_OF_SYM[NUMBER_OF_COMMANDS]=
@@ -114,7 +114,7 @@ const uint8_t COMMAND_NUM_OF_SYM[NUMBER_OF_COMMANDS]=
 	[FUN_CMD]=4,
 	[UNITS_CMD]=6,
 	[RANGE_CMD]=6,
-	[UNITSXX_CMD]=5,
+	[UNITSXX_CMD]=6,
 	[FUNXXY_CMD]=4,
 	[ACCURACYST_CMD]=11,
 	[ZERO_CMD]=4,
@@ -144,7 +144,7 @@ uint8_t BSFlag=0;
 void clear_buf(void)
 {
 	uint16_t i;
-	for(i=0;i<APP_RX_DATA_SIZE;i++)rx_buf[i]=0;
+	for(i=0;i<APP_RX_DATA_SIZE;i++)rx_buf[i]=' ';
 	rxcntr=0;
 	ANSWER=0xFFFF;
 }
@@ -206,7 +206,7 @@ void OneCommParseCycle(uint8_t com, const char* compare, uint8_t offset, uint8_t
 	if(ANSWER==0xFFFF){
 	for(i=0;i<len;i++)
 	{
-		if(rx_buf[i+offset]==compare[i]) ANSWER = com;
+		if((rx_buf[i+offset]==compare[i])||(rx_buf[i+offset]==compare[i]+32)) ANSWER = com;
 		else {ANSWER=0xFFFF; break;}
 	}}
 }
@@ -452,6 +452,23 @@ void Get_double(double*arr, uint8_t offset, uint16_t size)
 }
 
 
+uint16_t Scan_Uint16(uint8_t ofset, uint8_t*data)
+{
+	uint16_t i=0;
+	uint16_t result=0;
+
+	for(i=ofset;i<ofset+10;i++)
+	{
+		if((data[i]>=48)&&(data[i]<=58))
+		{
+			result*=10;
+			result+=(data[i]-48);
+		}
+		else return result;
+	}
+	return result;
+}
+
 
 
 void Parser_process(void)
@@ -519,11 +536,12 @@ void Parser_process(void)
 					CDC_Transmit_FS((unsigned char*)UNITS_NAME[Units], strlen(UNITS_NAME[Units]));
 					clear_buf(); break;
 				// Получить количество диапазонов измерения давления и значения этих диапазонов
-				case RANGE_CMD:
-
-					clear_buf(); break;
+				case RANGE_CMD: clear_buf(); break;
 				// Смена единицы измерения давления
-				case UNITSXX_CMD: clear_buf(); break;
+				case UNITSXX_CMD: RES=Scan_Uint16(COMMAND_NUM_OF_SYM[UNITSXX_CMD], (uint8_t*)rx_buf);
+				if(RES<11) {Units=RES; CDC_Transmit_FS((unsigned char*)"OK", 2);}
+				else CDC_Transmit_FS((unsigned char*)COMMAND_STRING[UNKNOWING_CMD], (uint8_t)COMMAND_NUM_OF_SYM[UNKNOWING_CMD]);
+				clear_buf(); break;
 				// Смена функции измерения напряжения, тока, контроля внешних контактов
 				case FUNXXY_CMD: clear_buf(); break;
 				// Класс точности манометра
